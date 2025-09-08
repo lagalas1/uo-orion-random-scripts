@@ -1,0 +1,103 @@
+function tracking() {
+	var summon_list = [];
+	var spellName = 'Summon Daemon';
+	var trackingGraphic = '0x0009';
+	
+	if (Orion.SkillValue('Magery') > 81) {
+		while (true) {
+			summon(spellName, trackingGraphic);
+			
+			summon_list = Orion.FindType(trackingGraphic, any, ground, 'red');
+			if (summon_list.length > 0) {
+				var tracking_sucess = false;
+				while (!tracking_sucess) {
+					Orion.UseSkill('38');
+					Orion.Wait(500);
+					
+					tracking_sucess = gump_selection('0xB16E7D71', 2);
+					gump_selection('0x3B378483', 1);
+				}
+			}
+			Orion.CloseGump('generic');
+			
+			desummon(trackingGraphic);
+		}
+	}
+	else {
+		Orion.Print(32, "You're skill is not high enough to summon 8th tier summons.");
+	}
+}
+
+function summon(spell, graphic) {
+	if (Orion.ScriptRunning('tracking') > 0) {
+		var summon_list = Orion.FindType(graphic, any, ground, 'red');
+			
+		while (summon_list.length == 0) {
+			Orion.Cast(spell);
+			Orion.Wait(1000);
+			
+			summon_list = Orion.FindType(graphic, any, ground, 'red');
+		}
+	}
+	else {
+		Orion.Print(32, 'Make sure you have the tracking script selected. This is the summon script.');
+	}
+}
+
+function desummon(graphic) {
+	if (Orion.ScriptRunning('tracking') > 0) {
+		var summon_list = Orion.FindType(graphic, any, ground, 'red');
+		
+		while (summon_list.length > 0) {
+			Orion.RequestContextMenu(summon_list[0]);
+			Orion.WaitForContextMenu();
+			var drop_down = Orion.GetContextMenu();
+			
+			if (drop_down.ItemsCount() == 6) {
+				drop_down.Select(5);
+				Orion.Wait(500);
+			}
+			
+			Orion.CloseGump('contextmenu');
+			
+			summon_list = Orion.FindType('0x000E', any, ground, 'red');
+		}
+	}
+	else {
+		Orion.Print(32, 'Make sure you have the tracking script selected. This is the desummon script.');
+	}
+}
+
+function gump_selection(serial, hook) {
+	var succeeded = false;
+
+	if (Orion.GetGump(any, serial)) {
+		var tracking_gump = Orion.GetGump(any, serial);
+		
+		tracking_gump.Select(Orion.CreateGumpHook(hook));
+		Orion.Wait(500);
+		
+		succeeded = true;
+	}
+	
+	return succeeded;
+}
+
+function trainStealth() {
+    const skillValueGoal = 1200;
+    const useSkillDelay = 10250;
+
+    while (Orion.SkillValue('hiding', 'real') < 800) {
+        Orion.UseSkill('hiding');
+        Orion.Wait(useSkillDelay);
+    }
+
+    while (Orion.SkillValue('stealth', 'real') < skillValueGoal) {
+        if (!Player.Hidden()) {
+            Orion.UseSkill('hiding');
+            Orion.Wait(useSkillDelay);
+        }
+        Orion.UseSkill('stealth');
+        Orion.Wait(useSkillDelay);
+    }
+}

@@ -1,0 +1,37 @@
+function trainBushido(trainLevel){
+	if(Orion.SkillValue('Bushido') < 300){
+		Orion.CharPrint('self', 43, 'Need atleast 30 skill, buy it or get jewels');
+		Orion.PauseScript();
+	}
+	toLevel = !trainLevel ? Orion.SkillValue('Bushido', 'cap') : trainLevel;
+	Orion.Print("Training Bushido to " +(toLevel/10).toFixed(1));
+	while(Orion.SkillValue('Bushido', 'real') < Orion.SkillValue('Bushido', 'cap')){
+		var skill = Orion.SkillValue('Bushido', 'real');
+		if(Player.Mana() < Player.MaxMana() * 0.25)
+			do {
+				medCheck();
+			} while (Player.Mana() < Player.MaxMana() * 0.75);
+		if(skill < 600)
+			Orion.Cast('Confidence');
+		else if(skill >= 600 && skill < 750){
+			if(Orion.ObjAtLayer('LeftHand') == null){
+				Orion.CharPrint('self', 43, 'You must equip a weapon to continue.');
+				Orion.PauseScript();
+			}
+			Orion.Cast('Counter Attack');
+		}
+		else if(skill >= 750 && skill < 1050)
+			Orion.Cast('Evasion');
+		else
+			Orion.Cast('Momentum Strike');
+		Orion.Wait(2000);
+	}
+}
+
+function medCheck(){
+	if(Orion.SkillValue('Meditation') < 400 || Orion.BuffExists('Meditation') || Orion.Timer('lastMed') < 12000)
+		return;
+	Orion.UseSkill('Meditation');
+	Orion.SetTimer('lastMed');
+	Orion.Wait(500);	
+}

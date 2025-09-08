@@ -1,0 +1,93 @@
+function start()
+{   
+   init();   
+   while(!Player.Dead())
+   {
+      for(var i in minePoints)
+      {      
+         Orion.Print('[i] Point '+i);      
+         Orion.WalkTo(minePoints[i]["x"],minePoints[i]["y"], minePoints[i]["z"],0);
+         for (var x = -config['tileOffset']; x <= config['tileOffset']; x++)
+         {
+            for (var y = -config['tileOffset']; y <= config['tileOffset']; y++)
+            {
+              MoveOre(); //my str allows me to hold a full set of mining (400+ ore) hence no need to stop mining to move.  Just make sure that all ore has been moved before you start to mine again. 
+               mine(x,y);
+            }
+         }
+      }
+   }
+}
+
+function mine(x,y)
+{
+   //Orion.Print("[i] Mining at offset X+"+x+" Y+"+y);
+   while(!Player.Dead())
+   {
+       if(checkTool())
+       {
+          if(Orion.ValidateTargetTileRelative('mine', x, y))
+          {
+             if(Orion.HaveTarget())
+                Orion.CancelWaitTarget();
+             
+             Orion.UseType(config['pickaxe']);   
+             Orion.WaitJournal('Where do you wish', Orion.Now(), Orion.Now()+2000, 'me|sys');
+            Orion.TargetTileRelative('mine', x, y, Player.Z());                          
+             var result = Orion.WaitJournal('You put some|You loosen some|There is no metal|Try mining|is too far|no line of| cannot be seen| mine that', Orion.Now(), (Orion.Now() + 7000), 'me|sys');          
+              if(result && (result.FindTextID()==6 || result.FindTextID()==7))
+             {
+             break;
+             }
+             if(result && result.FindTextID()==2)
+             {
+               // Orion.Print("[i] Tile depleted");
+                Orion.Wait(300);
+                break;
+             }             
+
+          }else{
+             break;
+          }       
+       }else{ //Not enough tools
+          break;
+       }
+   //Main Loop
+   }
+}
+function MoveOre()
+{
+  var findItems0 = Orion.FindType('0x19B9', '0xFFFF', 'backpack', 'item');
+
+	for(items in findItems0)
+	{
+		Orion.DragItem(findItems0[items], 0);
+		Orion.Wait('300');
+		Orion.DropDraggedItem('0x41C448BA');  // set this to your BOH, or pet or wherever you need. 
+		Orion.Wait('500');
+	}
+}
+
+function checkTool()
+{   
+   var tools = Orion.FindType(config['pickaxe'], -1, 'backpack');
+   if(tools && tools.length >= config['toolQty'])
+   {
+      //Orion.Print("[i] There is "+tools.length+" tools left");
+      return true;
+   }else{
+      Orion.Print("[e] Not enough tools");      
+      Orion.PlayWav("Alarm");
+      Orion.PauseScript();            
+      return false;
+   }
+}
+
+function init()
+{   
+
+   if(Player.WarMode())
+      Player.WarMode(false)
+
+   Orion.Print("Initialization...");
+}

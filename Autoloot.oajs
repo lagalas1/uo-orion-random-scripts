@@ -1,0 +1,256 @@
+//#include Claim.oajs
+function AutoLootOld()
+	{
+	Orion.Print('0x08F1', '⇒ СТАРТ АВТОЛУТА');
+	Orion.IgnoreReset;
+	for (var i = 0; i < 20; i++)
+		{
+		var nowcorpse = Orion.FindType('0x2006|0x0ECB|0x0ECC|0x0ED1|0x0ECE|0x0ED0|0x0ECD|0x0ED2','any', 'ground', ' ', '2');
+		if (nowcorpse<1) {break}
+		Orion.UseType('0x0EC3', 'any', 'backpack');
+		Orion.WaitTargetObject(nowcorpse);
+		Orion.CancelTarget();
+		Orion.Ignore(nowcorpse);
+		Orion.Wait(650);
+		}
+	Orion.IgnoreReset();
+	for (var i = 0; i < 20; i++)
+		{
+		if(Player.Weight() > 200)
+			{
+			for (var j = 0; j<10; j++)
+				{
+				var nowfur = Orion.FindType('0x1079','an	y', 'backpack', ' ', '0');
+				if (nowfur<1) {break}
+				Orion.UseType('0x0F9F', 'any', 'backpack');
+				Orion.WaitTargetObject(nowfur);
+				Orion.Wait(650);
+				}
+			}
+		var nowcorpse = Orion.FindType('0x2006|0x0ECB|0x0ECC|0x0ED1|0x0ECE|0x0ED0|0x0ECD|0x0ED2','any', 'ground', ' ', '2');
+		if (nowcorpse<1) {break}
+		Orion.Say('[claim');
+		Orion.WaitTargetObject(nowcorpse);
+		Orion.Ignore(nowcorpse);
+		Orion.Wait(400);
+		}
+	Orion.CancelTarget();
+	for (var k = 0; k<10; k++)
+		{
+		var GroundFur = Orion.FindType('0x1079','any', 'ground', ' ', '1');
+		if (GroundFur<1) {break}
+		Orion.UseType('0x0F9F', 'any', 'backpack');
+		Orion.WaitTargetObject(GroundFur);
+		Orion.Wait(650);
+		}
+	for (var L = 0; L<10; L++)
+		{
+		var GroundLeather = Orion.FindType('0x1081', 'any', 'ground', ' ', '2');
+		if (GroundLeather<1) {break};
+		for(items2 in GroundLeather)
+			{
+			Orion.DragItem(GroundLeather[items2], 0);
+			Orion.Wait('300');
+			Orion.DropDraggedItem('backpack');
+			Orion.Wait('500');
+			Orion.Ignore(GroundLeather[items2]);
+			}
+		}
+	Orion.Print('0x08F1', '⇒ АВТОЛУТ ЗАВЕРШЁН');
+	}
+	
+	function AutoLoot()
+	{
+	Orion.IgnoreReset();
+Orion.Ignore(self);
+	var deadenemies = Orion.FindTypeEx('0x2006|0x0ECB|0x0ECC|0x0ED1|0x0ECE|0x0ED0|0x0ECD|0x0ED2',"-1","-1","-1","18", '-1',false,'LootedBodies').sort(function (a, b) {
+    return a.Distance() - b.Distance();
+  });
+	if (deadenemies.length != 0)
+	{
+	
+	for (var i=0;i< deadenemies.length;i++)
+	{
+	if (deadenemies[i] == null) continue;
+	if (deadenemies[i].Distance() >2 && deadenemies[i].Distance() <100500)
+	{
+	Orion.WalkTo(deadenemies[i].X(), deadenemies[i].Y(),0);
+	} 	
+	Orion.Wait(200);
+	AutoLootCertain(deadenemies[i].Serial());
+	}
+	}
+	else
+	{
+	Orion.Print('Нету трупиков(((');
+	}
+		Orion.Print('0x08F1', '⇒ AUTOLOOT FINISHED');
+	}
+	
+	function AutoLootCertain(DeadBodySerial)
+	{
+	
+	Orion.Print('открываем труп');
+		Orion.UseObject(DeadBodySerial);
+	Orion.Wait('1000');
+	//GutBody(DeadBodySerial);
+	//ScissorBody();
+
+	Orion.Print('обыскиваем труп');
+	var list = Orion.FindList('Loot' , lastcontainer);
+	for (var i = 0; i < list.length; i++)
+{
+Orion.MoveItem(list[i]);
+Orion.Wait('600');
+}
+var deadbodyobject = Orion.FindObject(DeadBodySerial);
+if (deadbodyobject == null) return;
+Orion.AddIgnoreListObject('LootedBodies',DeadBodySerial,deadbodyobject.Name());
+}
+
+function GutBody(DeadBodySerial)
+{
+var deadbodyobject = Orion.FindObject(DeadBodySerial);
+if (deadbodyobject == null) return;
+if (!deadbodyobject.IsHuman())
+{
+Orion.Print("Это не человек");
+Orion.UseObject('dagger');//dagger serial
+if (Orion.WaitForTarget())
+Orion.TargetObject(DeadBodySerial);
+Orion.Wait('1000');
+}
+}
+	
+function ScissorBody()
+{
+var nowfur = Orion.FindType('0x1079','any', 'lastcontainer', ' ', '0');
+if (nowfur != 0)
+{
+        Orion.UseType('0x0F9F', 'any', 'backpack');
+        Orion.WaitTargetObject(nowfur);
+        Orion.Wait(650);
+}
+}
+
+function сброс_денег()
+  {
+  while(true)
+    {
+    while (!Player.Dead() && Player.Gold() > 1000)
+      {
+      Orion.Print('=> Нашли деньги');
+      if (Player.Gold() > 1000) 
+        {
+        {
+  var findItems0 = Orion.FindType('0x0EED', '0x0000', 'backpack', 'item|fast|recurse');
+  if (findItems0.length)
+  {
+    Orion.DragItem(findItems0[0], 30000);
+    Orion.Wait('500');
+  }
+  Orion.DropDraggedItem('0x007A2E36');
+  Orion.Wait('1000');
+}
+          {
+          Orion.Wait(100);
+          }
+        }
+      else
+        {
+        Orion.Wait(100);
+        }
+      }
+    }
+  }
+  
+  function Пополнение_бинтов()
+  
+  {
+  while(true)
+  {
+  if (Orion.Count('0x0E21', 'any', 'backpack')<20)  // бинты
+  {
+    
+    //var ArrowsNeeded = (489 - Orion.Count('0x1BFB', 'any', 'backpack'));    
+    Orion.UseObject(config['TKeysID']);  
+    gump(config['TailorKeysGump'], 60020);  // бинты
+    Orion.Wait(500);
+    gump(config['TailorKeysGump'], 0);
+    Orion.Wait(1500);
+    {
+Orion.UseType('0x0F9F', '0xFFFF');
+  if (Orion.WaitForTarget(1000))
+Orion.TargetType('0x1766', '0x0000');
+Orion.Wait(500);
+Orion.TargetObject('0x00000000');
+}
+    }
+  }
+}
+ var config = {
+
+
+    "TKeysID"          : Orion.FindType('0x176B','0x0045','backpack', 'item|recurce', '', '', true), //"0x421A4A2E",  //Tailors Keys ID. 
+    "WWKeysID"        : Orion.FindType('0x176B','0x0058','backpack', 'item|recurce', '', '', true), //"0x40FA14A0",  //Wood Workers Keys ID. 
+    "TailorKeysGump"    : "0x41F8FC19", //гамп Tailors Keys
+    "WoodKeysGump"    : "0x0A57934D", //гамп Wood Workers Keys
+    "TailorKeysAddButton"  : 60029,       //Кнопка добавления в Tailors Keys gump
+    "WoodKeysAddButton"  : 60023,       //Кнопка добавления в Wood Workers Keys gump
+
+      };
+
+
+function PackTo(finditems, keysID, gumpID, GumpAddButton) //вспомогательная функция
+  {
+  for (var i = 0; i < 1; i++)
+    {
+    Orion.IgnoreReset();
+    var nowfinditems = Orion.FindType(finditems, 'any', 'backpack', ' ', '0');  // Поиск типов для активации разгруза
+    if (nowfinditems<1) {Orion.Print('0x0015', '⇒ Нет вещей...'); break}; // Выход из текущего разгруза, если нет типов
+    Orion.UseObject(keysID);  Orion.Print('0x0015', '⇒ Нашли вещи...');
+    while (true)
+      {
+      var nowfinditems = Orion.FindType(finditems, 'any', 'backpack', ' ', '0');  // Поиск типов для разгруза
+      if (!nowfinditems.length) {break};// Выход из цикла, если нет типов
+      for (var j = 0; j < nowfinditems.length; j++) // Разгруз
+        {
+        gump(gumpID, GumpAddButton);    Orion.Print('0x0015', '⇒ Сохраняем вещи...');
+        Orion.WaitForTarget();
+        Orion.WaitTargetObject(nowfinditems[j]);
+        if (Orion.InJournal('not a valid type', 'my|sys'))
+          {Orion.Ignore(nowfinditems[j]); break};
+        Orion.Wait('300');
+        }
+      }
+    gump(gumpID, 0); //закрываем гамп
+    Orion.Wait(500); 
+    gump(gumpID, 0); //закрываем гамп
+    Orion.Wait(500); 
+    if (Orion.HaveTarget())        
+      Orion.CancelTarget(); //убираем прицел
+    }
+  Orion.Wait(100);
+  }
+
+function gump(gumpID, Gbutton) //вспомогательная функция - гампы хранилищ (ключи, гем пунч, домики,...)
+  {
+  if (Orion.WaitForGump(2000))
+    {
+    var gump0 = Orion.GetGump('last');
+    if ((gump0 !== null) && (!gump0.Replayed()) && (gump0.ID() === gumpID))
+      {
+      gump0.Select(Orion.CreateGumpHook(Gbutton));
+      Orion.Wait(200);
+      }
+    }  
+  }
+  
+  function AutoLootCycle()
+  {
+  while(!Player.Dead())
+  {
+  AutoLoot();
+  Orion.Wait(500);
+  }
+  }

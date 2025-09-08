@@ -1,0 +1,302 @@
+const _mining = {
+	"verbose": true,
+	//Max Weight to unload
+	"maxWeight": (Player.MaxWeight() - 20),
+	//Pickaxe type(pickaxe, shovel etc)
+	"forgeScanDistance": 120,
+	// Radius to dig (X+-2, Y+-2)
+	"tileOffset": 2,
+	"forges": {
+		"locations": [
+			// Add ur own forge locations!
+			{ "x": 3 "y": 2, "z": 1 },
+		]
+	},
+	"types": {
+		"tinkerTool": 0x1EB8,
+		"pickaxe": 0x0F39,
+		"ore": 0x19B9,
+		"ingot": 0x1BF2,
+		"forges": [0x0FB1, 0x19A2, 0x1996],
+	},
+	"craftTools": {
+		"enabled": true,
+		"minimumTools": 4,
+		"gumpButtons": {
+			"tinkerTool": 23,
+			"pickaxe": 72
+		}
+	},
+	"unload": {
+		"enabled": true,
+		"unloadWeightLimit": Player.MaxWeight() - 100,
+		"bankLocation": {
+			"x": 1066,
+			"y": 1458,
+			"z": -83
+		}
+	},
+	"skipTileMessages": [
+		"too far",
+		"seen",
+		"no metal",
+		"can't target"
+	]
+};
+
+var minePoints = {
+	1: { "x": 1, "y": 2 "z": 3 },
+	// Add your own mine!
+};
+
+function craft(tool, button) {
+	print("craft", "Craft button " + button + " with tool " + tool, true);
+	Orion.UseType(tool);
+	Orion.WaitGump(Orion.CreateGumpHook(button));
+	if (Orion.WaitForGump(2000)) {
+		Orion.WaitGump(Orion.CreateGumpHook("cancel"));
+		Orion.Wait(2000);
+	}
+}
+
+function craftTools() {
+	["tinkerTool", "pickaxe"].forEach(function (tool) {
+		while (Orion.Count(_mining["types"][tool]) < _mining["craftTools"]["minimumTools"]) {
+			craft(_mining["types"]["tinkerTool"], _mining["craftTools"]["gumpButtons"][tool]);
+			Orion.Wait(2000);
+		}
+	});
+}
+
+
+// #helpers/global.oajs
+function ifFeatureFlagEnabled(flag, func) {
+	if (_mining[flag]["enabled"]) {
+		func();
+	} else {
+		Orion.Print("FeatureFlag for the function " + flag + " is disabled, skipping ection")
+	}
+}
+
+
+function nearestForge() {
+	print("nearestForge", "Looking for the nearest forge... ", true);
+	var forges = {};
+	_mining["forges"]["locations"].forEach(function (location) {
+		var distance = Orion.GetDistance(location["x"], location["y"]);
+
+		forges[distance] = location;
+
+		print("nearestForge",
+			"Range: " + distance + " Location: " +
+			" X: " + location["x"] +
+			" Y: " + location["y"] +
+			" Z: " + location["z"], true);
+	});
+
+	const ranges = Object.keys(forges);
+	const min = Math.min.apply(Math, ranges);
+	print("nearestForge", "Ranges: " + Object.keys(forges), true);
+	print("nearestForge", "Minimum : " + min, true);
+	print("nearestForge",
+		"Location: " +
+		" X: " + forges[min]["x"] +
+		" Y: " + forges[min]["y"] +
+		" Z: " + forges[min]["z"], true);
+
+	return forges[min];
+}
+
+// #helpers/global.oajs
+function print(func, msg, debug) {
+	var debug = debug === undefined ? false : true;
+	if (_mining["verbose"] && debug) {
+		Orion.Print(0x0006, "[DEBUG] [" + func + "] " + msg, true)
+		return;
+	}
+
+	if (!debug) {
+		Orion.Print(0x0035, "[" + func + "] " + msg);
+	}
+
+
+}
+
+// #helpers/global.oajs
+function ensureContainerOpened(serial, bank) {
+	var isBank = bank === undefined ? false : true;
+	var cnt = 0;
+	print("ensureContainerOpened", "IsBank? " + isBank, true);
+	while (cnt < 5) {
+		cnt++;
+		print("ensureContainerOpened", "Try #" + cnt, true);
+
+		if (isBank) {
+			Orion.Say("bank");
+		} else {
+			Orion.UseObject(serial);
+		}
+
+		Orion.Wait(1000);
+		if (Orion.GetSerial("lastcontainer") == serial) {
+			print("ensureContainerOpened", "Container " + serial + " opened", true);
+			return true;
+		}
+		print("ensureContainerOpened", "Failed to open container " + serial, true);
+	}
+
+	return false;
+}
+
+function unload() {
+	print("unload", "Unloading...", true)
+	if (!ensureContainerOpened(Orion.ObjAtLayer("Backpack", Player.Serial()).Serial())) {
+		return false;
+	}
+
+	if (!ensureContainerOpened(Player.BankSerial(), true)) {
+		return false;
+	}
+
+	var ingots = Orion.FindType(_mining["types"]["ingot"]);
+	ingots.forEach(function (ingot) {
+		Orion.MoveItem(ingot, -1, Player.BankSerial());
+		Orion.Wait(2000);
+	});
+
+	print("unload", "Unloaded", true)
+}
+
+function start() {
+	init();
+	while (!Player.Dead()) {
+		for (var i in minePoints) {
+			print("start", "[i] Point " + i);
+			Orion.WalkTo(minePoints[i]["x"], minePoints[i]["y"], minePoints[i]["z"], 0);
+
+			for (var x = -_mining["tileOffset"]; x <= _mining["tileOffset"]; x++) {
+				for (var y = -_mining["tileOffset"]; y <= _mining["tileOffset"]; y++) {
+					var tiles = Orion.GetTiles("cave", Player.X() + x, Player.Y() + y);
+					tiles.forEach(function (tile) {
+						mine(tile.Graphic(), tile.X(), tile.Y(), tile.Z());
+					})
+				}
+			}
+		}
+	}
+}
+
+// #helpers/data.oajs
+function substInList(string, list) {
+	var result = false;
+	// print("substInList", "Check if '" + string + "' matches to " + list, true);
+	list.forEach(function (element) {
+		if (Orion.Contains(string, element)) {
+			print("substInList", "Matched " + element + " to " + string, true);
+			result = true;
+		}
+	});
+
+	return result;
+}
+
+function mine(graphic, x, y, z) {
+	while (!Player.Dead()) {
+		print("m", "123")
+		if (!checkTool()) {
+			print("mine", "Not enough tools, pausing the script.");
+			Orion.PauseScript();
+		}
+
+		print("m", "Tool ok")
+
+		if (Player.Weight() >= _mining["maxWeight"]) {
+			print("mine -> weight", "W: " + Player.Weight() + " Smelt: " + _mining["maxWeight"] + " Unload: " + _mining["unload"]["unloadWeightLimit"], true);
+			const forgeLocation = nearestForge();
+			Orion.WalkTo(forgeLocation["x"], forgeLocation["y"], forgeLocation["z"], 1);
+			smelt(Player.X(), Player.Y(), Player.Z());
+			ifFeatureFlagEnabled("craftTools", craftTools);
+			ifFeatureFlagEnabled("unload", function () {
+				if (Player.Weight() >= _mining["unload"]["unloadWeightLimit"]) {
+					if (!Orion.WalkTo(
+						_mining["unload"]["bankLocation"]["x"],
+						_mining["unload"]["bankLocation"]["y"],
+						_mining["unload"]["bankLocation"]["z"])) {
+						print("mine -> unload", "Failed to reach the bank, pausing the script")
+						Orion.PauseScript();
+					}
+					unload()
+					if (!Orion.WalkTo(x, y, z)) {
+						pprint("mine -> unload", "Failed to reach the spot, pausing the script")
+						Orion.PauseScript();
+					}
+				}
+			});
+		}
+		Orion.WalkTo(x, y, z, 0);
+		if (Orion.ValidateTargetTile(graphic, x, y, z)) {
+			if (Orion.HaveTarget())
+				Orion.CancelWaitTarget();
+
+			Orion.UseType(_mining["types"]["pickaxe"]);
+			Orion.WaitJournal("Where do you wish", Orion.Now(), Orion.Now() + 2000, "me|sys");
+			Orion.TargetTile(graphic, x, y, z);
+			var result = Orion.WaitJournal("You put some|You loosen some|There is no metal|Try mining|is too far|no line of|seen", Orion.Now(), (Orion.Now() + 7000), "me|sys");
+			// TODO: Refactor this
+			if (result && substInList(result.Text(), _mining["skipTileMessages"])) {
+				print("mine", "[i] Tile depleted", true);
+				Orion.Wait(300);
+				break;
+			}
+		} else {
+			print("mine", "Tile is not valid", true);
+			break;
+		}
+	}
+}
+function smelt(x, y, z) {
+	print("smelt", "[i] Smelting");
+	var forgeSerial = Orion.FindType(_mining["types"]["forges"].join("|"), -1, "ground", "", _mining["forgeScanDistance"]);
+	if (forgeSerial.length > 0) {
+		var forge = Orion.FindObject(forgeSerial[0]);
+		if (forge) {
+			if (Orion.WalkTo(forge.X(), forge.Y(), forge.Z(), 1)) {
+				while (Orion.FindType(_mining["types"]["ore"], -1, "backpack").length > 0) {
+					var ores = Orion.FindType(_mining["types"]["ore"], -1, "backpack");
+					ores.forEach(function (ore) {
+						Orion.UseObject(ore);
+						Orion.WaitJournal("Select the forge", Orion.Now(), Orion.Now() + 1000, "me|sys");
+						Orion.TargetObject(forgeSerial);
+						Orion.WaitJournal("You burn away|You smelt", Orion.Now(), Orion.Now() + 1000, "me|sys");
+						Orion.Wait(500);
+					});
+				}
+				//Back to spot
+				Orion.WalkTo(x, y, z, 0);
+			}
+		}
+	} else {
+		print("smelt", "Failed to find a forge, pausing the script.");
+		Orion.PauseScript();
+	}
+}
+function checkTool() {
+	var tools = Orion.FindType(_mining["types"]["pickaxe"], -1, "backpack");
+	if (tools && tools.length >= 0) {
+		return true;
+	}
+
+	print("checkTool", "[e] Not enough tools");
+	return false;
+
+}
+
+function init() {
+
+	if (Player.WarMode())
+		Player.WarMode(false)
+
+	print("init", "Initialization...");
+	print("init", "[Unloading] Enabled: " + _mining["unload"]["enabled"])
+	print("init", "[CraftTools] Enabled: " + _mining["craftTools"]["enabled"])
+}

@@ -1,0 +1,57 @@
+function attackMagArrow()
+{
+Orion.IgnoreReset();
+Orion.Ignore(self);
+var foundmobs = 1;
+while (foundmobs == 1)
+{
+var enemies = Orion.FindType(" !0x0191 | !0x0190 ", "-1", "ground", "mobile | near | ignorefriends", "12", "gray | criminal | murderer | enemy | red");
+//("-1", "-1", "ground", "human|near|live", 18, "gray|orange|red");
+//("!0x0190|!0x0191", "-1", "ground", "near|live", 18, "gray|red");
+if (enemies.length > 0)
+{
+foundmobs = 1;
+Orion.Wait(50);
+var mob = Orion.FindObject(enemies[0]);
+while(mob.Exists())
+{
+//Orion.WalkTo(mob.X(), mob.Y(),0); //comment this out if your using a bow
+//Orion.Wait(50);
+Orion.UseSkill('15');
+Orion.WaitForTarget();
+Orion.TargetObject(mob.Serial());
+Orion.Wait(50);
+Orion.Cast(5);
+Orion.WaitForTarget();
+Orion.TargetObject(mob.Serial());
+Orion.Wait(50);
+Orion.Attack(mob.Serial());
+Orion.Wait(50);
+}
+} else {
+foundmobs = 0;
+//claimeverything();
+}
+enemies.length = 0;
+}
+Orion.Print('0x0015', '   ⇒  ВСЕ КОНЧИЛИСЬ !!!');
+
+}
+//function claimeverything ()
+//{
+//var deadmob = Orion.FindType('0x2006', '-1', ground, '-1', '8');
+//if (deadmob.length)
+//{
+//Orion.Say('[claimall'); //change this to Orion.Say('[claim'); if you just want the gold
+//Orion.Wait(100);
+//for (i in deadmob)
+//{
+//if (Orion.WaitForTarget(1000))
+//Orion.TargetObject(deadmob);
+//}
+//if (Orion.WaitForTarget(1000))
+//Orion.TargetObject('0x00000000');
+//} else {
+//Orion.Print('0x0040',"nothing is dead...yet");
+//}
+//}

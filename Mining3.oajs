@@ -1,0 +1,158 @@
+var config = {
+	"maxWeight"  		: (Player.MaxWeight()-100), //Max Weight to unload
+	"pickaxe"    		: "0x0F39", //Pickaxe type(pickaxe, shovel etc)
+	"ore"				: "0x19B9",
+	"forge"      		: "0x0FB1",
+	"forgeScanDistance" : 20,
+	"toolQty"    		: 1,        //To keep in bag
+	"tileOffset" 		: 1,     // Radius to dig (X+-2, Y+-2)
+};
+
+var minePoints = {
+	1 : {"x" : 1918, "y" : 375, "z" : 0},
+	2 : {"x" : 1918, "y" : 373, "z" : 0},
+	3 : {"x" : 1918, "y" : 371, "z" : 0},
+	4 : {"x" : 1916, "y" : 371, "z" : 0},
+	5 : {"x" : 1916, "y" : 373, "z" : 0},
+	6 : {"x" : 1916, "y" : 375, "z" : 0},
+	7 : {"x" : 1914, "y" : 373, "z" : 0},
+	8 : {"x" : 1914, "y" : 371, "z" : 0},
+	9 : {"x" : 1912, "y" : 371, "z" : 0},
+	10 : {"x" : 1912, "y" : 373, "z" : 0},
+	11 : {"x" : 1910, "y" : 372, "z" : 0},
+	12 : {"x" : 1910, "y" : 370, "z" : 0},
+	13 : {"x" : 1908, "y" : 372, "z" : 0},
+	14 : {"x" : 1908, "y" : 369, "z" : 0},
+	15 : {"x" : 1906, "y" : 370, "z" : 0},
+	16 : {"x" : 1906, "y" : 368, "z" : 0},
+	17 : {"x" : 1906, "y" : 365, "z" : 0},
+	18 : {"x" : 1904, "y" : 370, "z" : 0},
+	19 : {"x" : 1904, "y" : 368, "z" : 0},
+	20 : {"x" : 1904, "y" : 366, "z" : 0},
+	21 : {"x" : 1904, "y" : 364, "z" : 0},
+	22 : {"x" : 1902, "y" : 370, "z" : 0},
+	23 : {"x" : 1902, "y" : 368, "z" : 0},
+	24 : {"x" : 1902, "y" : 363, "z" : 0},
+	25 : {"x" : 1902, "y" : 361, "z" : 0},
+	26 : {"x" : 1901, "y" : 359, "z" : 0},
+	27 : {"x" : 1900, "y" : 369, "z" : 0},
+	28 : {"x" : 1900, "y" : 367, "z" : 0},
+	29 : {"x" : 1898, "y" : 369, "z" : 0},
+	30 : {"x" : 1898, "y" : 367, "z" : 0},
+	31 : {"x" : 1898, "y" : 365, "z" : 0},
+	32 : {"x" : 1896, "y" : 365, "z" : 0},
+	33 : {"x" : 1896, "y" : 367, "z" : 0},
+	34 : {"x" : 1896, "y" : 369, "z" : 0},
+	35 : {"x" : 1894, "y" : 370, "z" : 0},
+	36 : {"x" : 1894, "y" : 368, "z" : 0},
+	37 : {"x" : 1894, "y" : 366, "z" : 0},
+	38 : {"x" : 1894, "y" : 364, "z" : 0},
+	39 : {"x" : 1892, "y" : 365, "z" : 0},
+	40 : {"x" : 1892, "y" : 363, "z" : 0},
+};
+
+function start()
+{	
+	init();	
+	while(!Player.Dead())
+	{
+		for(var i in minePoints)
+		{		
+			Orion.Print('[i] Point '+i);		
+			Orion.WalkTo(minePoints[i]["x"],minePoints[i]["y"], minePoints[i]["z"],0);
+			for (var x = -config['tileOffset']; x <= config['tileOffset']; x++)
+			{
+				for (var y = -config['tileOffset']; y <= config['tileOffset']; y++)
+				{
+					mine(x,y);
+				}
+			}
+		}
+	}
+}
+
+function mine(x,y)
+{
+	Orion.Print("[i] Mining at offset X+"+x+" Y+"+y);
+	while(!Player.Dead())
+	{
+	    if(checkTool())
+	    {
+	    	if(Player.Weight() >= config['maxWeight'] )
+	    		smelt(Player.X(),Player.Y(),Player.Z());
+
+	    	if(Orion.ValidateTargetTileRelative('mine', x, y))
+	    	{
+	    		if(Orion.HaveTarget())
+	    			Orion.CancelWaitTarget();
+	    		
+	    		Orion.UseType(config['pickaxe']);	
+	    		Orion.WaitJournal('Where do you wish', Orion.Now(), Orion.Now()+2000, 'me|sys');
+				Orion.TargetTileRelative('mine', x, y, Player.Z());	    			    		
+	    		var result = Orion.WaitJournal('You put some|You loosen some|There is no metal|Try mining|is too far|no line of|seen', Orion.Now(), (Orion.Now() + 7000), 'me|sys');	    	
+	    		if(result && result.FindTextID()==2)
+	    		{
+	    			Orion.Print("[i] Tile depleted");
+	    			Orion.Wait(300);
+	    			break;
+	    		}	    		
+
+	    	}else{
+	    		break;
+	    	}    	
+	    }else{ //Not enough tools
+	    	break;
+	    }
+	//Main Loop
+	}
+}
+function smelt(x,y,z){
+	Orion.Print("[i] Smelting");
+	var forgeSerial = Orion.FindType(config['forge'],-1,'ground','', config['forgeScanDistance']);
+	if(forgeSerial)
+	{
+		var forge = Orion.FindObject(forgeSerial);
+		if(forge)
+		{			
+			if(Orion.WalkTo(forge.X(),forge.Y(),forge.Z(),1))
+			{
+				var ores = Orion.FindType(config['ore'],-1, 'backpack');
+				if(ores && ores.length > 0)
+				{
+					ores.forEach(function(items){
+						Orion.UseType(config['ore']);
+						Orion.WaitJournal("Select the forge", Orion.Now(), Orion.Now()+1000, 'me|sys');
+						Orion.TargetObject(forgeSerial);
+						Orion.WaitJournal("You burn away|You smelt", Orion.Now(), Orion.Now()+1000, 'me|sys');
+						Orion.Wait(500);
+					});
+					//Back to spot
+					Orion.WalkTo(x,y,z,0);
+				}
+			}
+		}
+	}
+}
+function checkTool()
+{   
+	var tools = Orion.FindType(config['pickaxe'], -1, 'backpack');
+	if(tools && tools.length >= config['toolQty'])
+	{
+		//Orion.Print("[i] There is "+tools.length+" tools left");
+		return true;
+	}else{
+		Orion.Print("[e] Not enough tools");		
+		Orion.PlayWav("Alarm");
+		Orion.PauseScript();				
+		return false;
+	}
+}
+
+function init()
+{	
+
+	if(Player.WarMode())
+		Player.WarMode(false)
+
+	Orion.Print("Initialization...");
+}

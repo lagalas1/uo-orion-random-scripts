@@ -1,0 +1,214 @@
+//#include Calculations.oajs
+//#include Sustain.oajs
+var weapon = "0x4096EF53";
+
+function getWeaponInfo(serial)
+{
+	var result = {};
+	var exp = 0;
+	var lvl = 0;
+	var object = Orion.FindObject(serial);
+	if(object != null)
+	{
+		var properties = object.Properties();
+		var matchesExp = /Experience: (\d+)/.exec(properties);
+		var matcheslvl = /Level: (\d+)/.exec(properties);
+
+		if(matchesExp && matchesExp.length>0)		
+			var exp = parseInt(matchesExp[1]);		
+		
+		if(matcheslvl && matcheslvl.length>0)		
+			var lvl = parseInt(matcheslvl[1]);		
+
+		return {"lvl" : lvl, "exp" : exp};
+	}
+}
+
+function trackDeadMobs()
+{	
+	var started = new Date().getTime();	
+	var totalExp = 0;
+	while(true)
+	{		
+		var startExp = getWeaponInfo(weapon)['exp'];						
+		if(Orion.WaitJournal("You received",Orion.Now(),Orion.Now()+20000))
+		{	
+			Orion.Wait(500);
+			var currentExp = getWeaponInfo(weapon)['exp'];
+			var currentLvl = getWeaponInfo(weapon)['lvl'];
+			var toNextLvl = 100*Math.pow(currentLvl+1,2)-100;
+			Orion.Print('0x0035',"Weapon lvl : "+currentLvl);
+			Orion.Print('0x0035',"Weapon exp : "+currentExp+"/"+toNextLvl+" (+"+(currentExp-startExp)+")");
+			totalExp = totalExp+(currentExp-startExp);						
+			var minutes = ((new Date().getTime() - started) / 1000) / 60;
+			var expPerMinute = (totalExp/minutes).toFixed(2);
+			Orion.Print('0x0035', "Exp@minute : "+expPerMinute);
+		}
+	}
+}
+
+
+
+
+	var
+		MsgBandage = "You finish applying the bandages|You put the bloody bandage|failed";
+
+
+
+
+
+
+
+function WeaponAutoCast()
+	{
+	while (true)
+		{
+		while (!Player.Dead()) 
+			{
+			var Timer;
+			var Enemies = Orion.FindType('any','any','ground','live|ignorefriends|ignoreself', '1', '3|4|5|6');
+			if (Enemies>1 && Player.Mana()>10) {Orion.UseAbility('Secondary', true); Orion.Wait(200);break}
+			else {Orion.UseAbility('Primary', true); Orion.Wait(200);break}
+			}
+		}
+	}
+	
+		
+		
+		
+		function pilesos()
+{
+while (!Player.Dead())
+{
+Orion.Wait(50);
+var items = Orion.FindType('0xFFFF', '0xFFFF', ground, 'items', 2);
+for (var i = 0; i < items.length; i++)
+{
+var obj = Orion.FindObject(items[i]);
+if (obj != null && !obj.Locked())
+{
+Orion.MoveItem(items[i], 0, backpack);
+Orion.Wait(50);
+}
+}
+}
+}
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//   var
+//	    Brit = '0x43356574'; //рунбука с названием Brit
+	//    Rune1 = 7; //руна 1
+	  //  Rune2 = 17; //руна 2
+   	    //Rune3 = 27; //руна 3
+	    //Rune4 = 37; //руна 4
+	    //Rune5 = 47; //руна 5
+	    //Rune6 = 57; //руна 6
+   	    //Rune7 = 67; //руна 7
+	    //Rune8 = 77; //руна 8
+	    //Rune9 = 87; //руна 9
+	    //Rune10 = 97; //руна 10
+   	    //Rune11 = 107; //руна 11
+	    //Rune12 = 117; //руна 12
+	    //Rune13 = 127; //руна 13
+	    //Rune14 = 137; //руна 14
+   	    //Rune15 = 147; //руна 15
+	    //Rune16 = 157; //руна 16
+	    
+	    function Recall_Brit()
+{
+	Orion.UseObject('0x426D768F');
+	if (Orion.WaitForGump(1000))
+	{
+		var gump0 = Orion.GetGump('last');
+		if ((gump0 !== null) && (!gump0.Replayed()) && (gump0.ID() === '0x554B87F3'))
+		{
+			gump0.Select(Orion.CreateGumpHook(7));
+			Orion.Wait(100);
+		}
+	}
+}
+
+	    function Recall_Yeu1()
+{
+	Orion.UseObject('0x426D768F');
+	if (Orion.WaitForGump(1000))
+	{
+		var gump0 = Orion.GetGump('last');
+		if ((gump0 !== null) && (!gump0.Replayed()) && (gump0.ID() === '0x554B87F3'))
+		{
+			gump0.Select(Orion.CreateGumpHook(17));
+			Orion.Wait(100);
+		}
+	}
+}
+
+	    function Recall_Yeu2()
+{
+	Orion.UseObject('0x426D768F');
+	if (Orion.WaitForGump(1000))
+	{
+		var gump0 = Orion.GetGump('last');
+		if ((gump0 !== null) && (!gump0.Replayed()) && (gump0.ID() === '0x554B87F3'))
+		{
+			gump0.Select(Orion.CreateGumpHook(27));
+			Orion.Wait(100);
+		}
+	}
+}
+
+
+	    function Recall_Yeu3()
+{
+	Orion.UseObject('0x426D768F');
+	if (Orion.WaitForGump(1000))
+	{
+		var gump0 = Orion.GetGump('last');
+		if ((gump0 !== null) && (!gump0.Replayed()) && (gump0.ID() === '0x554B87F3'))
+		{
+			gump0.Select(Orion.CreateGumpHook(37));
+			Orion.Wait(100);
+		}
+	}
+}
+
+	    function Recall_Ship1()
+{
+	Orion.UseObject('0x426D768F');
+	if (Orion.WaitForGump(1000))
+	{
+		var gump0 = Orion.GetGump('last');
+		if ((gump0 !== null) && (!gump0.Replayed()) && (gump0.ID() === '0x554B87F3'))
+		{
+			gump0.Select(Orion.CreateGumpHook(47));
+			Orion.Wait(100);
+		}
+	}
+}
+
+	    function Recall_RGB()
+{
+	Orion.UseObject('0x426D768F');
+	if (Orion.WaitForGump(1000))
+	{
+		var gump0 = Orion.GetGump('last');
+		if ((gump0 !== null) && (!gump0.Replayed()) && (gump0.ID() === '0x554B87F3'))
+		{
+			gump0.Select(Orion.CreateGumpHook(67));
+			Orion.Wait(100);
+		}
+	}
+}
+
+
+function PrintLRC()
+{
+Orion.Print(Player.LRC());
+Orion.Print(Player.LMC());
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+

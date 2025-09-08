@@ -1,0 +1,15 @@
+// Paste your code here :)
+function AllToMount()
+  {
+var list = Orion.FindList('Loot | ignoreLists | IgnoreToMount' , 'backpack', 'item');
+  if (list.length)
+  {
+  for (var i=0;i<list.length;i++)
+  {
+ Orion.DragItem(list[i]);
+    Orion.Wait('500');
+  Orion.DropDraggedItem('MountBackpack');
+  Orion.Wait('1000');
+  }
+  }
+}

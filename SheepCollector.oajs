@@ -1,0 +1,76 @@
+//#include Autoloot.oajs
+//#include Claim.oajs
+//#include SortToMount.oajs
+
+function SheepCollector()
+{
+Orion.IgnoreReset();
+Orion.Ignore(self);
+var enemies = Orion.FindTypeEx(" 0x00CF | 0x00DF", "-1", "-1", "-1", "18").sort(function (a, b) {
+    return a.Distance() - b.Distance();
+  });
+
+var foundmobs = 1;
+while (foundmobs == 1)
+{
+var enemies = Orion.FindType(" 0x00CF | 0x00DF", "-1", "ground", "near", "18");
+//" 0x00CF ", "-1", "-1", "-1", "8", "gray | criminal | murderer | enemy | red"
+//("-1", "-1", "ground", "human|near|live", 18, "gray|orange|red");
+//("!0x0190|!0x0191", "-1", "ground", "near|live", 18, "gray|red");
+if (enemies.length > 0)
+{
+foundmobs = 1;
+Orion.Wait(50);
+var mob = Orion.FindObject(enemies[0]);
+while(mob.Exists())
+{
+while (mob.Distance() >1 && mob.Distance() <100500)
+{
+Orion.WalkTo(mob.X(), mob.Y(),0);
+} //comment this out if your using a bow
+Orion.Wait(200);
+Orion.UseType('0x0EC4', '0xFFFF');//dagger serial
+if (Orion.WaitForTarget())
+Orion.TargetObject(mob.Serial());
+Orion.Wait(500);
+Orion.Attack(mob.Serial());
+Orion.Wait(1000);
+GutSheep();
+}
+} else {
+foundmobs = 0;
+GutSheep();
+}
+enemies.length = 0;
+}
+AllToMount();
+Orion.Print("done attacking");
+}
+
+function GutSheep()
+{
+Orion.IgnoreReset();
+Orion.Ignore(self);
+var deadbodies = Orion.FindType(" 0x2006 ","-1", "-1", "-1", "20");
+
+if (deadbodies.length != 0){
+Orion.Print("Found dead sheep");
+for (var i=0;i<deadbodies.length;i++)
+{
+var deadbodie = Orion.FindObject(deadbodies[i]);
+Orion.WalkTo(deadbodie.X(), deadbodie.Y(),0); //comment this out if your using a bow
+//Orion.Wait(1000);
+Orion.Print('Perform equip dagger');
+Orion.UseType('0x0EC4', '0xFFFF');//dagger serial
+Orion.Print('Perform Gutting');
+if (Orion.WaitForTarget())
+Orion.TargetObject(deadbodie.Serial());
+Orion.Wait(1000);
+AutoLootCertain(deadbodie.Serial());
+Claim(deadbodie.Serial());
+}
+}
+else{
+Orion.Print("Cant find dead sheep bodies");
+}
+}

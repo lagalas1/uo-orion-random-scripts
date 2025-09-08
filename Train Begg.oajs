@@ -1,0 +1,172 @@
+//*************  configured for https://oldp.net/index.php  ********
+//      begging in BRITANIA
+//      for correct work on your server, enter the seller's ID and, if necessary, change the route coordinates
+
+function LUMPIN()
+{
+		// id of vendors for begging **************************************
+		
+		vendor_arr = ["0x0008E2BB" , "0x0008C061" , "0x0008E10D" , "0x0008C039" , "0x0008CB16" 	, "0x0008E13E"	, "0x0008E156" 	, "0x0008D03F" 	, 						"0x0008E14C"	, "0x0008B2E3" 	, "0x0008E2C7"	, "0x0008C1A1" 	, "0x0008E283"	, "0x0008E468" 	, "0x0008E485" 	, "0x00092FF7" 	, "0x0008B78A" 	, 				"0x0008D192"	, "0x0008E4C6" 	, "0x0008E4D4"	, "0x0008D188" ,
+"0x0008D299", "0x0008C32C", "0x0008D3DE", "0x0008C556", "0x0008D3F3" , "0x0008D292" , "0x0008C1E5" , "0x0008E693" , "0x0008E66E" , "0x0008D42A" ,  "0x0008E642" , "0x0008E659" , "0x00065819" , "0x0008C4B9" , "0x0008C4C4"
+
+	];
+
+
+waitVendor_arr = [  ] ;
+		for (var i = 0; i < vendor_arr.length; i++)
+		{
+				waitVendor_arr[i] = 0;
+		}
+
+
+Orion.SetBadLocation(1453, 1695);   //teleport coord
+Orion.SetBadLocation(1488, 1586);
+
+
+
+
+//   run around city and try find vendors     *******************************
+find_ven();
+Orion.WalkTo (1432 ,1734,20, 1);
+find_ven();
+Orion.WalkTo (1462,1697,0, 1);
+find_ven();
+Orion.WalkTo (1492,1682,20, 1);
+find_ven();
+Orion.WalkTo (1472,1606,20, 1);
+find_ven();
+Orion.WalkTo (1434,1573,30, 1);
+find_ven();
+Orion.WalkTo (1492,1572,30, 1);
+find_ven();
+Orion.WalkTo (1487,1638,20, 1);
+find_ven();	
+		
+				
+		
+
+
+		
+		
+
+function find_ven()	
+{
+	for (var a = 0; a < vendor_arr.length; a++)
+		{
+				
+				if ( waitVendor_arr[a] < Orion.Now() )
+				{
+						var res =Orion.FindObject(vendor_arr[a]);
+						if (res)
+						{				
+
+								Orion.Say('test' + a);
+								var ser = res.Serial();
+								Orion.ClientLastTarget(ser);
+								Orion.TargetSystemSerial(ser);
+
+								Orion.WalkTo(res.X(), res.Y(), res.Z(), 1);
+								Orion.Follow(ser);
+								scanJ();
+								waitVendor_arr[a]  =  Orion.Now() +900000;  //15 min dont toch this vendor
+						}
+						else
+								{   TextWindow.Open();    //Test print
+									TextWindow.Print(vendor_arr[a]);
+									TextWindow.Print(a);
+								}
+				}
+								else TextWindow.Print( Orion.Now() - waitVendor_arr[a] );
+		}
+}		
+ 		
+function scanJ ()
+{
+
+	msgs = ['Begging ended' ,
+				  'Of course,' ,
+				  'You put the gold coin'  ,
+				  'Oh, I have no money now|You must wait to use that' ,
+				  'You are already begging' ,
+				  'is too far away' ,
+				  'You must wait to use that' ,
+				  'You can use this skill only on humans' ,
+				  'with thoughts of battle'
+		];
+Orion.ClearJournal();	
+Orion.JournalIgnoreCase(true );
+Orion.UseSkill('Begging' );
+Orion.WaitTargetObject(Orion.ClientLastTarget() );
+
+var tim = Orion.Now() + 50000 ;
+while (tim >Orion.Now() )
+	{
+	Orion.Wait(1000);
+	//Orion.Say('xz');
+
+	if (Orion.FindObject(self).X() > 2000 )  //teleported BY mistake
+		{
+		TextWindow.Open();
+		TextWindow.Print('-==========PISEC==========-');
+		Orion.WalkTo(4413 ,1144, 0, 0);  //go back to teleport
+		}
+
+	if ( Orion.InJournal(msgs[7])      )   //wrong Target (ONLY VENDORS)
+		{
+		Orion.Say('netot');
+		break;
+		}
+	if ( Orion.InJournal(msgs[3])      )     // target need rest
+		{
+		Orion.Wait(1000);
+		Orion.Say('thenx');
+		Orion.ClearJournal();	
+		break;
+		}
+	if (Orion.InJournal(msgs[0]) )			// try one more time
+		{
+		Orion.Say('dEngi daVaj');
+		Orion.UseSkill('Begging' );
+		Orion.WaitTargetObject(Orion.ClientLastTarget() );
+		Orion.ClearJournal();	
+		var tim = Orion.Now() + 50000 ;
+		continue;
+		}
+	if (Orion.InJournal(msgs[5]) )			// try one more time
+		{
+		var tar = Orion.FindObject ( Orion.ClientLastTarget() );
+		Orion.WalkTo(tar.X(), tar.Y(), tar.Z(), 1);
+	
+		Orion.Follow(Orion.ClientLastTarget());
+		Orion.UseSkill('Begging' );
+		Orion.WaitTargetObject(Orion.ClientLastTarget() );
+		Orion.ClearJournal();	
+		var tim = Orion.Now() + 50000 ;
+		continue;
+		}
+	
+	
+	}
+Orion.Wait(1000);	
+Orion.Say('goodbye');	
+}			
+							
+		
+
+		
+
+}
+
+			
+								
+		
+
+
+
+
+function ViewRangNORM()
+{
+Orion.ClientViewRange(20);
+//Orion.Say(Orion.ClientViewRange()  );
+Orion.Info();
+}

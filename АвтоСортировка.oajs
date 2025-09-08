@@ -1,0 +1,245 @@
+	var config = {
+//		"Pet" 						: "0x00471D24", //<<<<<<<======!!!!!CHANGE THIS!!!!!
+//		"Quiver"						: "0x44856317", //<<<<<<<======!!!!!CHANGE THIS!!!!!
+//что упаковывать в SpellCasters Keys
+		"SCLoot"					: "0x0F7A|0x0F7B|0x0F84|0x0F85|0x0F86|0x0F88|0x0F8C|0x0F8D|0x0F78|0x0F8F|0x0F7D|0x0F8E|0x0F8A|0x0EF3|0x0F7E|0x0F0E",
+//что упаковывать в Metal Workers Keys
+		"MetalLoot"				: "0x1BF2",
+//что упаковывать в Tailors Keys
+		"TailorLoot"				: "0x1766|0x0DF8|0x1081|0x26B4|0x0F95",
+//что упаковывать в Wood Workers Keys
+		"WoodLoot"				: "0x1BD7|0x0F3F|0x1BFB|0x1BD1|0x1BD4|0x318F|0x3191|0x2F5F|0x3190|0x0DE1",
+//что упаковывать в Gem Puch
+		"GemLoot"					: "0x0F10|0x0F2D|0x0F13|0x0F19|0x0F26|0x0F16|0x0F21|0x0F25|0x0F15|0x3192|0x1EA7|0x3196|0x3195|0x3199|0x3195|0x3193|0x3197|0x3198|0x3194",
+//что упаковывать в Tolls House
+		"TollsLoot"					: "0x1EB8|0x1034|0x0E86|0x0F9D|0x13E4|0x097F|0x0E9B|0x1022|0x0FBF|0x0F43|0x0F39|0x12B3|0x102A",
+//что сбрасывать в Trash 4 Tokens сумку. Скроллы, мясо, что ещё?
+	//оружие
+//		"TrashWeapon"			: "0x27A6|0x27A8|0x13eb|0x13f0|0x13ee|0x13ec|0x13bb|0x13be|0x13bf|0x1410|0x1414|0x1413|0x1411|0x1415|0x1C04|0x140C|0x1408|0x140A|0x140E|0x1412|0x2774|0x1412|0x2777|0x2781|0x2784|0x2778|0x2785|0x2789|0x26bb|0x0F5E|0x26C1|0x1441|0x0F52|0x13FF|0x1401|0x0F61|0x13B6|0x13B9|0x27A2|0x2D33|0x2D2F|0x2D20|0x2D21|0x2D22|0x2D32|0x2D35|0x0F49|0x0F47|0x0F4B|0x0F45|0x13FB|0x1443|0x13B0|0x2D28|0x0F4D|0x26BD|0x26BF|0x143E|0x26C0|0x26BE|0x1403|0x26BA|0x0F62|0x1405|0x0E87|0x0E87|0x143D|0x0F5C|0x143B|0x26BC|0x1407|0x1439|0x27A3|0x2D24|0x0E89|0x1B7A|0x1B76|0x1B72|0x1B7B|0x13B4|0x0E81|0x1B74|0x13F6|0x0DF0|0x13B2|0x13FD|0x26C3|0x13F8|0x0E86|0x27AF|0x0EC4",
+	//armors
+//		"TrashArmor"				: "|0x144F|0x13DB|0x1450|0x1451|0x144E|0x1452|0x1DB9|0x13CB|0x1C08|0x1C0C|0x13DC|0x1C00|0x13C6|0x27C6|0x278A|0x277E|0x2793|0x2791|0x2796|0x278E|0x2792|0x2797",
+	//bows, crossbows
+//		"TrashBows"				: "|0x0F50|0x26C2",
+	//bijouterie
+//		"TrashBiga"				: "|0x1086|0x108A|0x1F09|0x1F06",
+	//ores, logs
+//		"TrashRes"				: "|0x1BDD|0x19B9",
+	//trash
+//		"TrashOther"				: "|0x1718|0x170F|0x1609|0x09B9|0x1516|0x1EFD|0x09F1|0x0EB2|0x1F0B|0x1C02|0x13CD|0x1C0A|0x13DA|0x13D5|0x1C06|0x13C7|0x13CC|0x13D6|0x13BE|0x13BF|0x1B73|0x1B79|0x3190|0x0FC7|0x0EB1|0x1F03|0x170D|0x1711|0x0A28|0x09C7|0x09C8|0x2782|0x2798|0x27A1",
+	//scrolls
+//		"TrashScroll"				: "|0x1F65|0x0E39|0x1F30|0x1F3F|0x1F3B|0x1F2D|0x1F3D|0x2262|0x1F40|0x2264|0x1F39|0x1F43|0x1F44|0x1F33|0x2263|0x1F35|0x1F36|0x1F3A|0x1F42|0x1F31|0x1F2F|0x1F5F|0x2269|0x2265|0x1F32|0x1F63|0x1F64|0x226A|0x1F45|0x226B|0x1F46|0x1F41|0x1F50|0x1F55|0x1F54|0x1F53|0x1F37|0x1F3C|0x1F5D|0x1F2E|0x1F34|0x1F48|0x1F58|0x2260|0x1F3E|0x1F4C|0x2261|0x1F56|0x1F4F|0x1F4E|0x2267|0x1F52|0x1F49|0x2268|0x1F38|0x1F51|0x1F5C|0x1F61|0x1F5A|0x2266|0x1F47|0x226E|0x1F4D|0x1F5B|0x1F5E|0x1F62|0x1F57|0x1F59|0x1F60|0x1F4A|0x1F4B|0x226F",
+	//bottles
+//		"TrashBottles"			: "|0x0F07|0x0F08|0x0F09|0x0F0C|0x0F0B|0x0F0A",
+
+		"TokensBag"				: Orion.FindType('0x09B2','0x0495','backpack', 'item|recurce', '', '', true), //"0x426A4626", //A Safe Trash 4 Tokens Backpack ID. 
+		"SCKeysID"				: Orion.FindType('0x176B','0x0021','backpack', 'item|recurce', '', '', true), //"0x42E42C8E", //Spell Casters Keys ID. 
+		"MWKeysID"				: Orion.FindType('0x176B','0x0014','backpack', 'item|recurce', '', '', true), //"0x421A01BE", //Metal Workers Keys ID.
+		"TKeysID"					: Orion.FindType('0x176B','0x0045','backpack', 'item|recurce', '', '', true), //"0x421A4A2E",	//Tailors Keys ID. 
+		"WWKeysID"				: Orion.FindType('0x176B','0x0058','backpack', 'item|recurce', '', '', true), //"0x40FA14A0",	//Wood Workers Keys ID. 
+		"GemPouchID"			: Orion.FindType('0x0E79','0x0875','backpack', 'item|recurce', '', '', true), //"0x469811C9",	//Gem Pouch ID.
+		"TollsHouseID"			: Orion.FindType('0x22C4','0x0045','backpack', 'item|recurce', '', '', true), //"0x4256A2D4",	//Tolls House ID. 
+		"SCKeysGump"			: "0x0EBCD833", //гамп Spell Casters Keys
+		"MetalKeysGump"		: "0xFB1E68CB", //гамп Metal Workers Keys
+		"TailorKeysGump"		: "0x41F8FC19", //гамп Tailors Keys
+		"WoodKeysGump"		: "0x0A57934D", //гамп Wood Workers Keys
+		"GemPouchGump"		: "0x1277DD7B", //гамп Gem Pouch
+		"TollsHouseGump"		: "0x5A356683", //гамп Tolls House
+		"SCKeysAddButton"		: 60030, 			//Кнопка добавления в Spell Casters Keys gump
+		"MetalKeysAddButton"	: 60015, 			//Кнопка добавления в Metal Workers gump
+		"TailorKeysAddButton"	: 60029, 			//Кнопка добавления в Tailors Keys gump
+		"WoodKeysAddButton"	: 60023, 			//Кнопка добавления в Wood Workers Keys gump
+		"GemPouchAddButton": 30, 					//Кнопка добавления в Gem Pouch gump
+		"TollsHouseAddButton": 60030,			//Кнопка добавления в Tolls House gump
+	//QUESTS loot items
+		//QuestLeggings - 0x3407 Crystallized Ectoplasm
+		//QuestCuiras - 0x3F31 - Essences of the Abyss
+		//QuestBoots - 0x3B92 - Scraps of Undead Hide
+		//QuestGauntlets - 0x3F30 - Scale of Vile Deeds
+		//QuestPauldrons - 0x3CD4 - Unearthly Stones
+		//QuestCoif - 0x393D - Rough Undead Sinew
+		//QuestReaperOfSouls - 0x3407|0x3CD4 - Crystallized Ectoplasm | Unearthly Stones
+		//QuestSashOfFog - 0x3F30|0x393D - Scale of Vile Deeds | Rough Undead Sinew
+		//QuestCloakOfMist - 0x3B92|0x3F31 - Scraps of Undead Hide | Essences of the Abyss
+		//Quest2DaemonicBlood - 0x195C - Vial Of Daemonic Blood
+		//"0x3407|0x3F31|0x393D|0x3B92|0x3CD4|0x3F30|0x195C|0x3737|0x1CED" - полный список из вышеупомянутых квестовых вещей
+		"QuestTrashItems"	: "0x3407|0x3F31|0x393D|0x3B92|0x3CD4|0x3F30|0x195C|0x3737|0x1CED", //что нужно сохранять - убрать из списка
+		};
+
+function AutoSorting() //основная функция автосортинга
+	{
+	Orion.Print('0x0013', '⇒ СТАРТ СОРТИРОВКИ');
+	PackTo(config['SCLoot'], config['SCKeysID'], config['SCKeysGump'], config['SCKeysAddButton']); //добавление вещей в Spell Casters Keys
+	PackTo(config['MetalLoot'], config['MWKeysID'], config['MetalKeysGump'], config['MetalKeysAddButton']); //добавление вещей в Metal Workers Keys
+	PackTo(config['TailorLoot'], config['TKeysID'], config['TailorKeysGump'], config['TailorKeysAddButton']); //добавление вещей в Tailors Keys
+//	PackTo(config['WoodLoot'], config['WWKeysID'], config['WoodKeysGump'], config['WoodKeysAddButton']); //добавление вещей в Wood Workers Keys
+	PackTo(config['GemLoot'], config['GemPouchID'], config['GemPouchGump'], config['GemPouchAddButton']); //добавление вещей в Gem Pouch
+	PackTo(config['TollsLoot'], config['TollsHouseID'], config['TollsHouseGump'], config['TollsHouseAddButton']); //добавление вещей в Tolls House
+//	LootToPet(config['Pet']); //сброс золота в лошадь
+//	TrashToTrashA(config['TokensBag']); //сброс хлама 1
+//	TrashToTrashB(config['TokensBag']); //сброс хлама 2
+//	TrashToTrash(config['QuestTrashItems'], config['TokensBag']); //сброс не нужных квестовых вещей
+//	ReloadQuiver();
+AllToMount();
+	Orion.Print('0x0013', '⇒ СОРТИРОВКА ЗАВЕРШЕНА');
+	}
+
+function PackTo(finditems, keysID, gumpID, GumpAddButton) //вспомогательная функция
+	{
+	for (var i = 0; i < 1; i++)
+		{
+		Orion.IgnoreReset();
+		var nowfinditems = Orion.FindType(finditems, 'any', 'backpack', ' ', '0');	// Поиск типов для активации разгруза
+		if (nowfinditems<1) {Orion.Print('0x0015', '⇒ Нет вещей...'); break}; // Выход из текущего разгруза, если нет типов
+		Orion.UseObject(keysID);	Orion.Print('0x0015', '⇒ Нашли вещи...');
+		while (true)
+			{
+			var nowfinditems = Orion.FindType(finditems, 'any', 'backpack', ' ', '0');	// Поиск типов для разгруза
+			if (!nowfinditems.length) {break};// Выход из цикла, если нет типов
+			for (var j = 0; j < nowfinditems.length; j++) // Разгруз
+				{
+				gump(gumpID, GumpAddButton);		Orion.Print('0x0015', '⇒ Сохраняем вещи...');
+				Orion.WaitForTarget();
+				Orion.WaitTargetObject(nowfinditems[j]);
+				if (Orion.InJournal('not a valid type', 'my|sys'))
+					{Orion.Ignore(nowfinditems[j]); break};
+				Orion.Wait('300');
+				}
+			}
+		gump(gumpID, 0); //закрываем гамп
+		//Orion.Wait(500); 
+		gump(gumpID, 0); //закрываем гамп
+		Orion.Wait(500); 
+		if (Orion.HaveTarget())				
+			Orion.CancelTarget(); //убираем прицел
+		}
+	Orion.Wait(100);
+	}
+
+function gump(gumpID, Gbutton) //вспомогательная функция - гампы хранилищ (ключи, гем пунч, домики,...)
+	{
+	if (Orion.WaitForGump(2000))
+		{
+		var gump0 = Orion.GetGump('last');
+		if ((gump0 !== null) && (!gump0.Replayed()) && (gump0.ID() === gumpID))
+			{
+			gump0.Select(Orion.CreateGumpHook(Gbutton));
+			Orion.Wait(200);
+			}
+		}	
+	}
+
+function TrashToTrashA(TrashBag) //функция уборки ненужного оружия, брони, луков, ресурсов
+	{
+	while (true)
+		{
+		Orion.IgnoreReset();
+		var TrashLists1 = config['TrashWeapon'] + config['TrashArmor'] + config['TrashBows'] + config['TrashRes'];
+		var TrashListsA = Orion.FindType(TrashLists1, '0x0000', 'backpack', ' ', '0');
+		if (!TrashListsA.length) {Orion.Print('0x0015', '⇒ Хлам отсутствует...'); break};// Выход из цикла, если нет хлама
+		for(items in TrashListsA)
+			{
+			TimerToTrash = Orion.Now() + 3000;
+			Orion.Print('0x0015', '⇒ Убираем хлам...');
+			Orion.MoveItem(TrashListsA[items], 0, TrashBag);
+			Orion.Wait('600');
+			Orion.Ignore(TrashListsA[items]);
+			if (Orion.Now() > TimerToTrash) {break};
+			}
+		}
+	}
+
+function TrashToTrashB(TrashBag) //функция уборки ненужных свитков, бутылок, иных вещей
+	{
+	while (true)
+		{
+		Orion.IgnoreReset();
+		var TrashLists2 = config['TrashOther'] + config['TrashScroll'] + config['TrashBottles'];
+		var TrashListsB = Orion.FindType(TrashLists2, 'any', 'backpack', ' ', '0');
+		if (!TrashListsB.length) {Orion.Print('0x0015', '⇒ Хлам отсутствует...'); break};// Выход из цикла, если нет хлама
+		for(items in TrashListsB)
+			{
+			TimerToTrash = Orion.Now() + 3000;
+			Orion.Print('0x0015', '⇒ Убираем хлам...');
+			Orion.MoveItem(TrashListsB[items], 0, TrashBag);
+			Orion.Wait('600');
+			Orion.Ignore(TrashListsB[items]);
+			if (Orion.Now() > TimerToTrash) {break};
+			}
+		}
+	}
+
+function TrashToTrash(TrashList, TrashBag)
+	{
+	while (true)
+		{
+		Orion.IgnoreReset();
+		var TrashListsQ = Orion.FindType(TrashList, 'any', 'backpack', ' ', '0');
+		if (!TrashListsQ.length) {Orion.Print('0x0015', '⇒ Хлам отсутствует...'); break};// Выход из цикла, если нет хлама
+		for(items in TrashListsQ)
+			{
+			TimerToTrash = Orion.Now() + 3000;
+			Orion.Print('0x0015', '⇒ Убираем хлам...');
+			Orion.MoveItem(TrashListsQ[items], 0, TrashBag);
+			Orion.Wait('600');
+			Orion.Ignore(TrashListsQ[items]);
+			if (Orion.Now() > TimerToTrash) {break};
+			}
+		}
+	}
+
+function ReloadQuiver() // функция перезарядки Колчана
+	{
+	var QuiverID = config['Quiver'];
+	if (Orion.Count('0x0F3F', 'any', QuiverID)>=400)
+		Orion.Print('0x0015', '⇒ Стрел достаточно');
+	if (Orion.Count('0x0F3F', 'any', QuiverID)<400)
+		{
+		var ArrowsNeeded = (489 - Orion.Count('0x0F3F', 'any', QuiverID));		Orion.Print('0x0015', '⇒ Пополняем стрелы...');
+		Orion.UseObject(config['WWKeysID']);	
+		gump(config['WoodKeysGump'], 60013);
+		Orion.Wait(500);
+		var ArrowsPlaced = Orion.FindType('0x0F3F', 'any', 'backpack');
+		Orion.MoveItem(ArrowsPlaced, ArrowsNeeded, QuiverID);
+		Orion.Wait('600');
+		gump(config['WoodKeysGump'], 60023);
+		if (Orion.WaitForTarget(1000))
+			Orion.TargetObject(Orion.FindType('0x0F3F', 'any', 'backpack'));
+		Orion.Wait(200); 
+		if (Orion.HaveTarget())				
+			Orion.CancelTarget();
+		gump(config['WoodKeysGump'], 0);
+		}
+	}
+
+function LootToPet(Pet) //функция сброса золота в лошадь
+	{
+	while (true)
+		{
+		Orion.IgnoreReset();
+		var Gold = Orion.FindType('0x0EED', 'any', 'backpack', 'item|fast|recurse');
+		if (!Gold.length) {break};// Выход из цикла, если нет золота
+		if (Orion.GetDistance(Pet)>1) {break};
+		for(items in Gold)
+			{
+			Orion.MoveItem(Gold[items], 0, Pet);
+			Orion.Wait('500');
+			Orion.Ignore(Gold[items]);
+			}
+		}
+	}
+	
+	
+	function AllToMount()
+  {
+var list = Orion.FindList('Loot | ignoreLists | IgnoreToMount' , 'backpack', 'item');
+  if (list.length)
+  {
+  for (var i=0;i<list.length;i++)
+  {
+ Orion.DragItem(list[i]);
+    Orion.Wait('500');
+  Orion.DropDraggedItem('MountBackpack');
+  Orion.Wait('1000');
+  }
+  }
+}

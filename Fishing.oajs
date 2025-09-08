@@ -1,0 +1,53 @@
+function fishing()
+{
+	while(true)
+	{
+		for (var x = -4; x <= 4; x++)
+		{
+			for (var y = -4; y <= 4; y++)
+			{
+				Orion.EquipT('0x0DC0');
+				Orion.UseType('0x0DC0', '0xFFFF');
+				if (Orion.WaitForTarget(1000))
+				{
+					Orion.TargetTileRelative('water', x, y, 65533);
+					Orion.Wait('7500');
+				}	
+				if (Orion.InJournal("biting here", 'my|sys' ,0, any, 0, 0))   
+				{
+					Orion.Print("fishes all gone");
+					Orion.ClearJournal();
+					Orion.Say('forward');
+					Orion.Wait('7500');
+					Orion.Say('stop');
+				}             
+			}
+		}	
+	}
+}
+function fishingtest()
+{
+	while(true)
+	{Orion.EquipT('0x0DC0');
+		for (var x = -4; x <= 4; x++)
+		{
+			for (var y = -4; y <= 4; y++)
+			{
+Orion.UseType('0x0DC0', '0xFFFF');
+				if (Orion.WaitForTarget(1000))
+				{
+					Orion.TargetTileRelative('water', x, y, 65533);
+					Orion.Wait('7500');
+				}	
+				if (Orion.InJournal("biting here", 'my|sys' ,0, any, 0, 0))   
+				{
+					Orion.Print("fishes all gone");
+					Orion.ClearJournal();
+					Orion.Say('forward');
+					Orion.Wait('7500');
+					Orion.Say('stop');
+				}             
+			}
+		}	
+	}
+}

@@ -1,0 +1,172 @@
+var config = {
+	"maxWeight"  		: 390, 			//Max Weight to cut wood 
+	"weightToPack"      : 300, 			//Weight to use Woodworker's Keys 
+	"axe"    			: "0x0F43", 	//Axe type
+	"logs"				: "0x1BDD",		//Log type
+	"board" 			: "0x1BD7", 	//Boards type	
+	"keys"              : "0x40779367",	//Woodworkers keys ID !!!!!!! EDIT !!!!!!!!!!
+	"addBoardButton"    : 60023, 		//Last button ID in keys gump
+	"treesSearchOffset" : 10,			//Radius of tree search
+	"toKeys"            : [0x318F,0x2F5F,0x3190,0x3191]
+};
+
+var points = { // !!! EDIT !!!
+	1 : {"x" : 1773, "y" : 2809, "z" : 0},
+	2 : {"x" : 1746, "y" : 2808, "z" : 0},
+	//You can add more ^_^
+}; //Trinsic
+
+function start()
+{	
+	while(!Player.Dead())
+	{
+		for(point in points)
+		{
+			Orion.WalkTo(points[point]['x'],points[point]['y'],points[point]['z'],0);			
+			var splited = getTreeTiles(config['treesSearchOffset']);				
+			if(splited)
+			{
+				var cnt=0;
+		    	for(var i = 0; i<=splited.length-3; i+=3)
+		    	{        
+		    		cnt++;
+			        var x = splited[i];
+			        var y = splited[i+1];
+			        var z = splited[i+2];
+						
+					Orion.Print('0x0035','Point #'+point+' Tree #'+cnt+'/'+splited.length/3);		
+					Orion.Print('0x0099','X = '+x+' Y = '+y+' Z = '+z);
+					Orion.WalkTo(x,y,z,1);			
+					chop(x,y,z);			
+				}
+			}
+		}
+		
+	}
+}
+
+
+function chop(x,y,z)
+{
+	//Orion.Print("[i] Chopping at  X+"+x+" Y+"+y);
+	while(!Player.Dead())
+	{
+    	if(Player.Weight() >= config['maxWeight'] )
+    	{
+    		cut();
+    	}
+
+    	if(Orion.ValidateTargetTile('tree', x, y))
+    	{    		
+    		if(Orion.HaveTarget())
+    			Orion.CancelWaitTarget();
+    		
+    		Orion.UseType(config['axe']);	    		
+			Orion.WaitTargetTile('tree', x, y, z);	    			    		
+    		var result = Orion.WaitJournal("You hack at|You put|not enough|is too far|no line of|seen", Orion.Now(), (Orion.Now() + 7000), 'me|sys');	    	
+    		if(result && result.FindTextID()==2)
+    		{
+    			Orion.Print("[i] Tile depleted");
+    			Orion.Wait(300);
+    			break;
+    		}	    		
+    	}
+	}//Main Loop
+}
+
+function cut()
+{
+	var logs = Orion.FindType(config['logs'],-1, 'backpack');
+	if(logs && logs.length > 0)	
+	{
+		logs.forEach(function(log){
+			Orion.Wait('moveitemdelay');
+			Orion.UseType(config['axe']);
+			Orion.WaitTargetObject(log);
+			Orion.Wait('moveitemdelay');
+		});
+		
+		if(Player.Weight() >= config['weightToPack'])		
+		{
+			Orion.Wait('moveitemdelay');
+			PackWood();
+		}
+	}
+	
+}
+
+function PackWood()
+{
+	var _ingHook = Orion.CreateGumpHook(config['addBoardButton']);
+	var _keys = Orion.FindObject(config['keys']);
+	if(_keys)
+	{
+		Orion.UseObject(config['keys']);
+		if(Orion.WaitForGump(1000))
+		{								
+			var _ingotGump = Orion.GetLastGump();
+			_ingotGump.Select(_ingHook);						
+			var _orePack = Orion.FindType(config['board'],-1,'backpack');
+			if(_orePack && _orePack.length > 0)
+			{
+				config['toKeys'].forEach(function(item){					
+					var misc = Orion.FindType(item);
+					if(misc && misc.length>0)
+					{
+						Orion.Wait(500);										
+						Orion.CancelWaitTarget();					
+						Orion.Wait(100);
+						Orion.TargetObject(misc[0]);
+						Orion.Wait(500);					
+					}
+				});
+
+				_orePack.forEach(function(serial){
+					Orion.Wait(500);										
+					Orion.CancelWaitTarget();					
+					Orion.Wait(100);
+					Orion.TargetObject(serial);
+					Orion.Wait(500);				
+				});				
+				Orion.Wait(500);
+			}									
+		}
+		Orion.Wait(1000);
+		Orion.UseObject(config['keys']);
+		Orion.WaitForGump(1000);
+		var _ingotGumpClose = Orion.GetLastGump();
+			_ingotGumpClose.Select(Orion.CreateGumpHook(0));				
+		Orion.Wait(1000);
+
+		if (Orion.HaveTarget())				
+		    Orion.CancelTarget();				
+	}
+}
+
+
+function getTreeTiles(offset)
+{
+    var validTiles=[];
+    var cntValid = 0;
+    for (var x = -offset; x <= offset; x++)
+    {
+        for (var y = -offset; y <= offset; y++)
+        {
+            if(Orion.ValidateTargetTileRelative('tree',x,y))
+            {
+                //Orion.Print("Valid tile! X="+x+" Y="+y);
+                validTiles.push(Player.X()+x,Player.Y()+y,0);
+                cntValid++;
+            }
+        }
+    }
+
+	    
+
+    Orion.Print("[getTreeTiles]Trees found = "+cntValid);
+    if(cntValid>0)
+        return validTiles;
+    else
+        return false;    
+    
+}

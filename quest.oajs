@@ -1,0 +1,63 @@
+//#include _Attak.oajs
+//#include Autoloot.oajs
+
+function quest()
+{
+while (!Player.Dead())
+{
+Orion.WalkTo(102,1955,0,2,255,0);
+Orion.Wait(10000);
+AutoLoot();
+Claim1();
+Orion.WalkTo(99,1940,0,2,255,0);
+Orion.Wait(10000);
+AutoLoot();
+Claim1();
+Orion.WalkTo(85,1939,0,2,255,0);
+Orion.Wait(10000);
+AutoLoot();
+Claim1();
+Orion.WalkTo(69,1946,0,2,255,0);
+Orion.Wait(10000);
+AutoLoot();
+Claim1();
+Orion.WalkTo(71,1970,0,2,255,0);
+Orion.Wait(10000);
+AutoLoot();
+Claim1();
+Orion.WalkTo(86,1971,0,2,255,0);
+Orion.Wait(10000);
+AutoLoot();
+Claim1();
+Orion.WalkTo(102,1969,0,2,255,0);
+Orion.Wait(10000);
+AutoLoot();
+Claim1();
+Orion.WalkTo(86,1955,0,2,255,0);
+Orion.Wait(10000);
+AutoLoot();
+Claim1();
+}
+}
+
+
+function WalkToPoion(x,y)
+{
+while (!Player.Dead())
+{
+Player.WalkTo(x,y,0,2,255,0);
+if (Player.X == x && Player.Y ==y)
+{
+if (CurrentPoint == 4)
+{
+CurrentPoint =1;
+break;
+}
+else
+{
+CurrentPoint++;
+break;
+}
+}
+}
+}

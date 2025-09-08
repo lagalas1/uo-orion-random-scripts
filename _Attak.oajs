@@ -1,0 +1,174 @@
+//#include Sustain.oajs
+
+function attackcycle()
+{
+while(!Player.Dead())
+{
+attackClosest();
+Orion.Wait(100);
+}
+}
+function attackClosest()
+{
+	Orion.IgnoreReset();
+	Orion.Ignore(self);
+	var enemies = Orion.FindTypeEx("-1", "-1", "ground", "live | ignorefriends", 8, "gray|criminal | murderer | enemy |orange|red", false, 'IgnoreAttack').sort(function (a, b) {
+    return a.Distance() - b.Distance();
+  });
+//("-1", "-1", "ground", "human|near|live", 18, "gray|orange|red");
+//" !0x0191 | !0x0190 ", "-1", "ground", "mobile | ignorefriends", "8", "gray | criminal | murderer | enemy | red"
+//("!0x0190|!0x0191", "-1", "ground", "near|live", 18, "gray|red");
+
+	if (enemies.length > 0)
+		{
+		for (var i=0;i<enemies.length;i++)
+			{
+			Orion.Wait(50);
+			
+			if (enemies[i] == null) continue;
+			Orion.Print(enemies[i].Name());
+			while (enemies[i].Exists())
+				{
+				drinkpotions();
+				Orion.WalkTo(enemies[i].X(), enemies[i].Y(),5); 
+				Orion.Wait(50);
+				usediscordance(enemies[i].Serial());
+			//	if (Orion.WaitForTarget(1000))
+			//		Orion.TargetObject(enemies[i].Serial());
+				while(enemies[i].Exists() && enemies[i].Distance() >2 && enemies[i].Distance() <100500)
+					{
+					Orion.WalkTo(enemies[i].X(), enemies[i].Y(),1); 
+					Orion.Wait(50);
+					}
+				while(enemies[i].Exists() && enemies[i].Distance() < 2)
+					{
+if(Orion.Timer('firehorntimer') > 7000 ||Orion.Timer('firehorntimer') == -1)
+{
+Orion.SetTimer('firehorntimer');
+if (Orion.UseType('0x0FC7', '0xFFFF'))
+{
+	if (Orion.WaitForTarget(1000))
+		Orion.TargetObject(enemies[i].Serial());
+}
+}
+					usebetterability(1);
+					useconsecrateweapon();
+					Orion.Attack(enemies[i].Serial());
+					Orion.Wait(50);
+					}
+				}
+			}
+		}
+Orion.Print("done attacking");
+Orion.RemoveTimer('firehorntimer');
+}
+
+function usebetterability(maxdistance)
+{
+var enemies = Orion.FindType("-1", "-1", "ground", "live | ignorefriends", maxdistance, "gray|criminal | murderer | enemy |orange|red", false, 'IgnoreAttack');
+if (enemies.length > 1)
+{
+if  (!Orion.AbilityStatus('Primary') && Player.Mana() > 5)
+				Orion.UseAbility('Primary', true);
+}
+else
+{
+if  (!Orion.AbilityStatus('Secondary') && Player.Mana() > 35)
+				Orion.UseAbility('Secondary', true);
+}
+}
+
+function useconsecrateweapon()
+{
+if (Player.Mana < 8) return;
+if(Orion.Timer('consecrateweapontimer') > 10000 || Orion.Timer('consecrateweapontimer') == -1)
+{
+Orion.SetTimer('consecrateweapontimer');
+Orion.Cast('203');
+}
+}
+function useevade()
+{
+if (Player.Mana < 8) return;
+if(Orion.Timer('evadetimer') > 5000 || Orion.Timer('evadetimer') == -1)
+{
+Orion.SetTimer('evadetimer');
+Orion.Cast('403');
+}
+}
+
+function usediscordance(serial)
+{
+   if  (!Orion.FindType('0x0EB3|0x0E9C|0x0E9D|0x0E9E|0x0EB1|0x0EB2|0x2805', -1, 'backpack').length > 0)
+    return;
+   Orion.UseSkill('15',serial);
+}
+
+function squirrelunpacking()
+{
+var squirrel = Orion.FindType('0x2D97','0x0482');
+if (squirrel.length > 0)
+{
+for (var i=0;i<squirrel.length;i++)
+{
+Orion.UseObject(squirrel[i]);
+Orion.Wait('useitemdelay');
+}
+Orion.Say('All Guard me');
+}
+else
+{
+squirrelpacking();
+}
+}
+
+function squirrelpacking()
+{
+var squirrel =Orion.FindType('0x0116','-1', "ground", "live", 4);
+
+while (squirrel.length < 4)
+{
+Orion.Say('All Follow me');
+Orion.Wait(200);
+squirrel =Orion.FindType('0x0116','-1', "ground", "live", 4);
+}
+for (var i=0;i<squirrel.length;i++)
+{
+	Orion.UseType('0x1374', '0xFFFF');
+	if (Orion.WaitForTarget(1000))
+		Orion.TargetObject(squirrel[i]);
+		Orion.Wait(400);
+}
+}
+
+function Train()
+{
+Orion.IgnoreReset();
+	Orion.Ignore(self);
+	while (true)
+	{
+  
+        var instrument = Orion.FindType( '0x0E9C|0x2805|0x0E9D|0x2805' , -1, 'backpack','fast');
+      Orion.UseObject(instrument[0]);
+	var enemies = Orion.FindType("!0x0191|!0x0190", "-1", "ground", "live | ignorefriends", 6, "gray|criminal | murderer | enemy |orange|red", false, 'IgnoreAttack');
+	Orion.Wait(50);
+
+	for (var i=0;i<enemies.length;i++)
+	{
+	Orion.Print(enemies.length);
+			var mob = Orion.FindObject(enemies[i]);
+			if (mob == null) continue;
+			Orion.UseSkill('15');
+//					if (Orion.WaitForTarget(2000))
+//Orion.TargetObject(instrument[0]);
+				if (Orion.WaitForTarget(1000))
+					Orion.TargetObject(mob.Serial());
+					Orion.Wait(1000);
+					
+	}		
+	Orion.AddDisplayTimer('wat', 90);		
+	Orion.Wait(130000);
+	
+
+	}		
+}

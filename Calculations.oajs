@@ -1,0 +1,117 @@
+function TimerTest()
+{
+//Orion.RemoveTimer('TestTimer'); // Сбрасываем и убираем таймер
+Orion.Print(Orion.Timer('TestTimer'));
+while(true)
+{
+if(Orion.Timer('TestTimer') > 10000 ||Orion.Timer('TestTimer') == -1) //Если прошло 60 секунд или таймер не создан тогда
+{
+Orion.SetTimer('TestTimer'); // создаем таймер
+Orion.Print('TimerStartOrReset');// делаем нужныем нам штуки
+}
+}
+}
+
+function getLowerCostNum(equipserial, word, symnum) 
+{
+var asObject = Orion.FindObject(equipserial);
+var clothesProperties = Orion.GetProperties(equipserial); // сохраняем свойста в переменную
+var reagentindex = clothesProperties.indexOf(word); // ищем индекс Reagenta 
+if (reagentindex == -1)
+return 0; // если слово Reagent не найдено возвращаем 0
+reagentindex += symnum; //+ пропускаем 13 символов
+clothesProperties = clothesProperties.substr(reagentindex,2); // отделяем цифры, возможно с процентами
+clothesProperties = clothesProperties.replace('%',''); // убираем процент в стринге
+var clothesReagentCost = Number(clothesProperties); // преобразуем стринг в число
+Orion.Print(asObject.Name() + ' ' + clothesReagentCost);
+return clothesReagentCost; // складываем
+}
+
+function getallequippedclothes()
+{
+var armorr = Orion.FindType('any','any','self');
+var TotalCost = 0;
+var TotalFCR =0;
+var TotalFC =0;
+var TotalSpellDamage =0;
+var TotalLower_Mana_Cost=0;
+for (var i = 0;i<armorr.length;i++)
+{
+TotalCost += getLowerCostNum(armorr[i], 'Reagent', 13);
+}
+Orion.Print('0x0013', 'LowerReagentCost ' + TotalCost);
+for (var i = 0;i<armorr.length;i++)
+{
+TotalLower_Mana_Cost += getLowerCostNum(armorr[i], 'Lower Mana Cost', 16);
+}
+Orion.Print('0x0013', 'Lower Mana Cost ' + TotalLower_Mana_Cost);
+for (var i = 0;i<armorr.length;i++)
+{
+TotalFCR += getLowerCostNum(armorr[i], 'Cast Recovery', 14);
+}
+Orion.Print('0x0013', 'ФастКастРековери ' + TotalFCR);
+
+for (var i = 0;i<armorr.length;i++)
+{
+TotalFC += getLowerCostNum(armorr[i], 'Casting', 8);
+}
+Orion.Print('0x0013', 'ФастКаст ' + TotalFC);
+for (var i = 0;i<armorr.length;i++)
+{
+TotalSpellDamage += getLowerCostNum(armorr[i], 'Spell Damage Increase', 22);
+}
+Orion.Print('0x0013', 'SpellDamage ' + TotalSpellDamage);
+
+}
+function getLowerCostNum(equipserial, word, symnum) 
+{
+var asObject = Orion.FindObject(equipserial);
+var clothesProperties = Orion.GetProperties(equipserial); // сохраняем свойста в переменную
+var reagentindex = clothesProperties.indexOf(word); // ищем индекс Reagenta 
+if (reagentindex == -1)
+return 0; // если слово Reagent не найдено возвращаем 0
+reagentindex += symnum; //+ пропускаем 13 символов
+clothesProperties = clothesProperties.substr(reagentindex,2); // отделяем цифры, возможно с процентами
+clothesProperties = clothesProperties.replace('%',''); // убираем процент в стринге
+var clothesReagentCost = Number(clothesProperties); // преобразуем стринг в число
+Orion.Print(asObject.Name() + ' ' + clothesReagentCost);
+return clothesReagentCost; // складываем
+}
+function getallequippedclothes()
+{
+var armorr = Orion.FindType('any','any','self');
+var TotalCost = 0;
+var TotalFCR =0;
+var TotalFC =0;
+var TotalSpellDamage =0;
+var TotalLower_Mana_Cost=0;
+
+for (var i = 0;i<armorr.length;i++)
+{
+TotalCost += getLowerCostNum(armorr[i], 'Reagent', 13);
+}
+Orion.Print('0x0013', 'LowerReagentCost ' + TotalCost);
+for (var i = 0;i<armorr.length;i++)
+{
+TotalLower_Mana_Cost += getLowerCostNum(armorr[i], 'Lower Mana Cost', 16);
+}
+Orion.Print('0x0013', 'Lower Mana Cost ' + TotalLower_Mana_Cost);
+for (var i = 0;i<armorr.length;i++)
+{
+TotalFCR += getLowerCostNum(armorr[i], 'Cast Recovery', 14);
+}
+Orion.Print('0x0013', 'ФастКастРековери ' + TotalFCR);
+
+for (var i = 0;i<armorr.length;i++)
+{
+TotalFC += getLowerCostNum(armorr[i], 'Casting', 8);
+}
+Orion.Print('0x0013', 'ФастКаст ' + TotalFC);
+for (var i = 0;i<armorr.length;i++)
+{
+TotalSpellDamage += getLowerCostNum(armorr[i], 'Spell Damage Increase', 22);
+}
+Orion.Print('0x0013', 'SpellDamage ' + TotalSpellDamage);
+    }
+    
+
