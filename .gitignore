@@ -4,3 +4,4 @@ Config/
 GlobalConfig/
 SavedHotkeys/
 *.dll
+*pdb
