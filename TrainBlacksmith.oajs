@@ -1,0 +1,91 @@
+//#include SortToMount.oajs
+function GeneratedScript_133056()
+{
+while(!Player.Dead())
+{
+	if (Orion.WaitForGump(5000))
+	{
+		var gump0 = Orion.GetGump('last');
+		if ((gump0 !== null) && (!gump0.Replayed()) && (gump0.ID() === '0x38920ABD'))
+		{
+			gump0.Select(Orion.CreateGumpHook(21));
+			Orion.Wait(4000);
+		}
+	}
+		var crafted = Orion.FindType('0x1414','any','backpack','fast');
+		if (crafted.length)
+		{
+	if (Orion.WaitForGump(5000))
+	{
+		var gump1 = Orion.GetGump('last');
+		if ((gump1 !== null) && (!gump1.Replayed()) && (gump1.ID() === '0x38920ABD'))
+		{
+			gump1.Select(Orion.CreateGumpHook(14));
+			Orion.Wait(100);
+		}
+	}
+	if (Orion.WaitForTarget(1000))
+Orion.TargetObject(crafted);
+Orion.Wait(4000);
+}
+}}
+
+function CraftShovels()
+{
+while(!Player.Dead())
+	{
+	if (Orion.WaitForGump(5000))
+	{
+		var gump0 = Orion.GetGump('last');
+		if ((gump0 !== null) && (!gump0.Replayed()) && (gump0.ID() === '0x38920ABD'))
+		{
+			gump0.Select(Orion.CreateGumpHook(21));
+			Orion.Wait(4000);
+		}
+	}
+		var crafted = Orion.FindType('0x0F39','any','backpack','fast');
+		if (crafted.length)
+		{
+		Orion.MoveItem(crafted, 0, 'MountBackpack');
+		Orion.Wait(500);
+		}
+	}
+}
+
+function CraftHammers()
+{
+while(!Player.Dead())
+	{
+	if (Orion.WaitForGump(1000))
+	{
+		var gump0 = Orion.GetGump('last');
+		if ((gump0 !== null) && (!gump0.Replayed()) && (gump0.ID() === '0x38920ABD'))
+		{
+			gump0.Select(Orion.CreateGumpHook(21));
+			Orion.Wait(4000);
+		}
+	}
+	
+	var crafted = Orion.FindType('0x13E4','any','backpack','fast');
+		if (crafted.length)
+		{
+		Orion.MoveItem(crafted, 0, 'MountBackpack');
+		Orion.Wait(500);
+		}
+	}
+}
+
+
+function MoveShovels()
+{
+while(!Player.Dead())
+{
+
+var crafted = Orion.FindType('0x0F39','any','MountBackpack','fast');
+		if (crafted.length)
+		{
+		Orion.MoveItem(crafted);
+		Orion.Wait(500);
+		}
+
+}}
