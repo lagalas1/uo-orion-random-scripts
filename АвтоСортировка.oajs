@@ -2,7 +2,7 @@
 //		"Pet" 						: "0x00471D24", //<<<<<<<======!!!!!CHANGE THIS!!!!!
 //		"Quiver"						: "0x44856317", //<<<<<<<======!!!!!CHANGE THIS!!!!!
 //что упаковывать в SpellCasters Keys
-		"SCLoot"					: "0x0F7A|0x0F7B|0x0F84|0x0F85|0x0F86|0x0F88|0x0F8C|0x0F8D|0x0F78|0x0F8F|0x0F7D|0x0F8E|0x0F8A|0x0EF3|0x0F7E|0x0F0E",
+		"SCLoot"					: "0x0F7A|0x0F7B|0x0F84|0x0F85|0x0F86|0x0F88|0x0F8C|0x0F8D|0x0F78|0x0F8F|0x0F7D|0x0F8E|0x0F8A|0x0EF3|0x0F7E|0x0F0E|0x0F80",
 //что упаковывать в Metal Workers Keys
 		"MetalLoot"				: "0x1BF2",
 //что упаковывать в Tailors Keys
@@ -231,9 +231,16 @@ function LootToPet(Pet) //функция сброса золота в лошад
 	
 	function AllToMount()
   {
-var list = Orion.FindList('Loot | ignoreLists | IgnoreToMount' , 'backpack', 'item');
+var list = Orion.FindList('ToMount' , 'backpack', 'item');
   if (list.length)
   {
+  Orion.WarMode(0);
+  var mount = Orion.ObjAtLayer('Mount')
+  if (mount != null)
+  {
+  Orion.UseObject('self');
+Orion.Wait('700');
+}
   for (var i=0;i<list.length;i++)
   {
  Orion.DragItem(list[i]);
@@ -241,5 +248,7 @@ var list = Orion.FindList('Loot | ignoreLists | IgnoreToMount' , 'backpack', 'it
   Orion.DropDraggedItem('MountBackpack');
   Orion.Wait('1000');
   }
+    if (mount != null)
+  Orion.UseObject('Mount');
   }
 }

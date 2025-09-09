@@ -1,7 +1,7 @@
 // Paste your code here :)
 function AllToMount()
   {
-var list = Orion.FindList('Loot | ignoreLists | IgnoreToMount' , 'backpack', 'item');
+var list = Orion.FindList('ToMount' , 'backpack', 'item');
   if (list.length)
   {
   for (var i=0;i<list.length;i++)
