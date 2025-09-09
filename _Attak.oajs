@@ -6,6 +6,10 @@ while(!Player.Dead())
 {
 attackClosest();
 Orion.Wait(100);
+AutoLoot();
+Orion.Wait(100);
+AutoSorting();
+Orion.Wait(100);
 }
 }
 function attackClosest()
@@ -24,20 +28,16 @@ function attackClosest()
 		for (var i=0;i<enemies.length;i++)
 			{
 			Orion.Wait(50);
-			
 			if (enemies[i] == null) continue;
-			Orion.Print(enemies[i].Name());
-			while (enemies[i].Exists())
+			while (enemies[i].Exists() && !Player.Dead())
 				{
 				drinkpotions();
 				Orion.WalkTo(enemies[i].X(), enemies[i].Y(),5); 
 				Orion.Wait(50);
 				usediscordance(enemies[i].Serial());
-			//	if (Orion.WaitForTarget(1000))
-			//		Orion.TargetObject(enemies[i].Serial());
 				while(enemies[i].Exists() && enemies[i].Distance() >2 && enemies[i].Distance() <100500)
 					{
-					Orion.WalkTo(enemies[i].X(), enemies[i].Y(),1); 
+					Orion.WalkTo(enemies[i].X(), enemies[i].Y(),0); 
 					Orion.Wait(50);
 					}
 				while(enemies[i].Exists() && enemies[i].Distance() < 2)

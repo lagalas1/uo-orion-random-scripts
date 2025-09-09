@@ -4,4 +4,6 @@ Config/
 GlobalConfig/
 SavedHotkeys/
 *.dll
+*.zip
 *pdb
+.vs/
