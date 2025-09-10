@@ -1,40 +1,34 @@
-function Claim1()
-{
-Orion.IgnoreReset();
-Orion.Ignore(self);
-var deadbodies = Orion.FindTypeEx(" 0x2006|0x0ECB|0x0ECC|0x0ED1|0x0ECE|0x0ED0|0x0ECD|0x0ED2 ","-1", "-1", "-1", "10").sort(function (a, b) {
+function Claim1() {
+  Orion.IgnoreReset();
+  Orion.Ignore(self);
+  var deadbodies = Orion.FindTypeEx(
+    " 0x2006|0x0ECB|0x0ECC|0x0ED1|0x0ECE|0x0ED0|0x0ECD|0x0ED2 ",
+    "-1",
+    "-1",
+    "-1",
+    "10"
+  ).sort(function (a, b) {
     return a.Distance() - b.Distance();
   });
-if (deadbodies.length != 0){
-Orion.Print("Found dead bodie");
-
-for (var i=0;i<deadbodies.length;i++)
-{
-if (deadbodies[i].Distance() >2 && deadbodies[i].Distance() <100500)
-	{
-	Orion.WalkTo(deadbodies[i].X(), deadbodies[i].Y(),0);
-	} 	
-Orion.Say('[claim');
-if (Orion.WaitForTarget(2000))
-Orion.TargetObject(deadbodies[i].Serial());
+  if (deadbodies.length != 0) {
+    Orion.Print("Found dead bodie");
+    for (var i = 0; i < deadbodies.length; i++) {
+      if (deadbodies[i].Distance() > 2 && deadbodies[i].Distance() < 100500) {
+        Orion.WalkTo(deadbodies[i].X(), deadbodies[i].Y(), 0);
+      }
+      Orion.Say("[claim");
+      if (Orion.WaitForTarget(2000)) Orion.TargetObject(deadbodies[i].Serial());
+    }
+    if (Orion.WaitForTarget()) Orion.TargetObject("0x00000000");
+  } else {
+    Orion.Print("Cant find dead bodies");
+  }
+  Orion.ClearIgnoreList("LootedBodies");
 }
-if (Orion.WaitForTarget())
-Orion.TargetObject('0x00000000');
+
+function Claim(DeadObjectSerial) {
+  Orion.Print("Говорим claim");
+  Orion.Say("[claim");
+  if (Orion.WaitForTarget(2000)) Orion.TargetObject(DeadObjectSerial);
+  if (Orion.HaveTarget()) Orion.CancelWaitTarget();
 }
-else{
-Orion.Print("Cant find dead bodies");
-}
-Orion.ClearIgnoreList('LootedBodies');
-} 
-
-
-
-function Claim(DeadObjectSerial)
-{
-Orion.Print('Говорим claim');
-Orion.Say('[claim');
-if (Orion.WaitForTarget())
-Orion.TargetObject(DeadObjectSerial);
-if (Orion.WaitForTarget())
-Orion.TargetObject('0x00000000');
-} 

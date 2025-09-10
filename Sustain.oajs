@@ -1,128 +1,119 @@
-var equipedweapon = '0';
-function drinkpotions()
-{
-if (Orion.ObjAtLayer('LeftHand') && Orion.ObjAtLayer('RightHand')) {
-        equipedweapon = Orion.ObjAtLayer('RightHand').Serial();
-    } else if (Orion.ObjAtLayer('LeftHand') && (!Orion.ObjAtLayer('RightHand'))) {
-        equipedweapon = Orion.ObjAtLayer('LeftHand').Serial();
+var equipedweapon = "0";
+function drinkpotions() {
+  if (Orion.ObjAtLayer("LeftHand") && Orion.ObjAtLayer("RightHand")) {
+    equipedweapon = Orion.ObjAtLayer("RightHand").Serial();
+  } else if (Orion.ObjAtLayer("LeftHand") && !Orion.ObjAtLayer("RightHand")) {
+    equipedweapon = Orion.ObjAtLayer("LeftHand").Serial();
+  }
+  drinkpotion(
+    "StrengthPotion",
+    "StrenghtPotionTimer",
+    125000,
+    "НЕТУ ЗЕЛЬЯ СИЛЫ"
+  );
+  drinkpotion(
+    "AgilityPotion",
+    "AgilityPotionTimer",
+    125000,
+    "НЕТУ ЗЕЛЬЯ ЛОВКОСТИ"
+  );
+  if (Player.Hits() < Player.MaxHits() / 2 && !Player.Poisoned())
+    drinkpotion(
+      "HealthPotion",
+      "HealthPotionTimer",
+      12000,
+      "НЕТУ ЗЕЛЬЯ ЗДОРОВЬЯ"
+    );
+  Orion.Equip(equipedweapon);
+  Orion.Wait("moveitemdelay");
+}
+
+function drinkpotion(PotionType, PotionTimer, msec, notfoundmsg) {
+  var potion = Orion.FindType(PotionType, "any", "PotionBag", "fast");
+
+  if (potion.length > 0) {
+    if (Orion.Timer(PotionTimer) > msec || Orion.Timer(PotionTimer) == -1) {
+      if (Orion.ObjAtLayer("LeftHand") && Orion.ObjAtLayer("RightHand")) {
+        Orion.Unequip("RightHand");
+        Orion.Wait("moveitemdelay");
+      } //else if (Orion.ObjAtLayer('LeftHand') && (!Orion.ObjAtLayer('RightHand'))) {
+      // Orion.Unequip('LeftHand');
+      // Orion.Wait('moveitemdelay');
+      //  }
+      Orion.SetTimer(PotionTimer);
+      Orion.UseObject(potion[0]);
+      Orion.Wait("useitemdelay");
     }
-drinkpotion('StrengthPotion','StrenghtPotionTimer',125000,'НЕТУ ЗЕЛЬЯ СИЛЫ');
-drinkpotion('AgilityPotion','AgilityPotionTimer',125000,'НЕТУ ЗЕЛЬЯ ЛОВКОСТИ');
-if (Player.Hits() < Player.MaxHits() / 2 && !Player.Poisoned()) 
-drinkpotion('HealthPotion','HealthPotionTimer',12000,'НЕТУ ЗЕЛЬЯ ЗДОРОВЬЯ');
-   Orion.Equip(equipedweapon);
-       Orion.Wait('moveitemdelay');
+  } else {
+    Orion.Print("0x0020", notfoundmsg);
+  }
 }
 
-function drinkpotion(PotionType,PotionTimer,msec, notfoundmsg)
-{
-var potion = Orion.FindType(PotionType,'any','PotionBag','fast')
-
-if (potion.length >0)
-{
-if(Orion.Timer(PotionTimer) > msec ||Orion.Timer(PotionTimer) == -1) 
-{
-if (Orion.ObjAtLayer('LeftHand') && Orion.ObjAtLayer('RightHand')) {
-        Orion.Unequip('RightHand');
-        Orion.Wait('moveitemdelay');
-    } //else if (Orion.ObjAtLayer('LeftHand') && (!Orion.ObjAtLayer('RightHand'))) {
-       // Orion.Unequip('LeftHand');
-       // Orion.Wait('moveitemdelay');
-  //  }
-    Orion.SetTimer(PotionTimer);
-    Orion.UseObject(potion[0]);
-    Orion.Wait('useitemdelay');
-}
-}
-else
-{
-Orion.Print('0x0020',notfoundmsg);
-}
-}
-
-function getbliss()
-{
-if(Orion.Timer('BlessTimer') > 123000 ||Orion.Timer('BlessTimer') == -1)
-{ 
-if (Orion.ObjAtLayer('LeftHand') && Orion.ObjAtLayer('RightHand')) {
-        equipedweapon = Orion.ObjAtLayer('RightHand').Serial();
-    } else if (Orion.ObjAtLayer('LeftHand') && (!Orion.ObjAtLayer('RightHand'))) {
-        equipedweapon = Orion.ObjAtLayer('LeftHand').Serial();
+function getbliss() {
+  if (Orion.Timer("BlessTimer") > 123000 || Orion.Timer("BlessTimer") == -1) {
+    if (Orion.ObjAtLayer("LeftHand") && Orion.ObjAtLayer("RightHand")) {
+      equipedweapon = Orion.ObjAtLayer("RightHand").Serial();
+    } else if (Orion.ObjAtLayer("LeftHand") && !Orion.ObjAtLayer("RightHand")) {
+      equipedweapon = Orion.ObjAtLayer("LeftHand").Serial();
     }
-    Orion.RemoveDisplayTimer('blesstimer');
+    Orion.RemoveDisplayTimer("blesstimer");
 
-		Orion.Cast('16');
-	if (Orion.WaitForTarget(2000))
-		Orion.TargetObject('self');
-		Orion.Wait(900);
-	Orion.Cast('17');
-	if (Orion.WaitForTarget(2000))
-		Orion.TargetObject('self');
-			Orion.Wait(900);
-			Orion.Cast('10');
-				if (Orion.WaitForTarget(2000))
-		Orion.TargetObject('self');
-			Orion.Wait(900);
-	Orion.Cast('9');
-	if (Orion.WaitForTarget(1000))
-		Orion.TargetObject('self');
-		    Orion.Wait('waittargetdelay');
-		   Orion.Equip(equipedweapon);
-       Orion.Wait('moveitemdelay');
-        Orion.SetTimer('BlessTimer');
+    Orion.Cast("16");
+    if (Orion.WaitForTarget(2000)) Orion.TargetObject("self");
+    Orion.Wait(900);
+    Orion.Cast("17");
+    if (Orion.WaitForTarget(2000)) Orion.TargetObject("self");
+    Orion.Wait(900);
+    Orion.Cast("10");
+    if (Orion.WaitForTarget(2000)) Orion.TargetObject("self");
+    Orion.Wait(900);
+    Orion.Cast("9");
+    if (Orion.WaitForTarget(1000)) Orion.TargetObject("self");
+    Orion.Wait("waittargetdelay");
+    Orion.Equip(equipedweapon);
+    Orion.Wait("moveitemdelay");
+    Orion.SetTimer("BlessTimer");
 
-Orion.AddDisplayTimer('blesstimer', 120000, 'RightTop', 'Circle|Bar', 'Bless');
-}
-}
-
-
-function Автохил_бинты()
-	{
-
-		while (!Player.Dead() && Orion.Count("bandage"))
-			{
-	
-			if (Player.Hits() < Player.MaxHits() - 1) 
-				{
-				Orion.ClearJournal(MsgBandage);
-				Orion.Print('=> Хилимся...');
-				Orion.BandageSelf();
-				TimerBandage = Orion.Now() + 3500; //при малом количестве DEX увеличить время с 5000 до 8000-12000
-				while (!Orion.InJournal(MsgBandage) && Orion.Now() < TimerBandage)
-					{
-					Orion.Wait(100);
-					}
-				}
-			else
-				{
-				Orion.Wait(100);
-				}
-			}
-	}
-
-
-function CastEnemyOfOne()
-{
-if (Player.Mana() < 20) return;
-Orion.RemoveDisplayTimer('testtimer');
-Orion.Cast('206');
-Orion.AddDisplayTimer('testtimer', 215000, 'RightTop', 'Circle|Bar', 'EOO');
-
-
+    Orion.AddDisplayTimer(
+      "blesstimer",
+      120000,
+      "RightTop",
+      "Circle|Bar",
+      "Bless"
+    );
+  }
 }
 
+function Автохил_бинты() {
+  while (!Player.Dead() && Orion.Count("bandage")) {
+    if (Player.Hits() < Player.MaxHits() - 1) {
+      Orion.ClearJournal(MsgBandage);
+      Orion.Print("=> Хилимся...");
+      Orion.BandageSelf();
+      TimerBandage = Orion.Now() + 3500; //при малом количестве DEX увеличить время с 5000 до 8000-12000
+      while (!Orion.InJournal(MsgBandage) && Orion.Now() < TimerBandage) {
+        Orion.Wait(100);
+      }
+    } else {
+      Orion.Wait(100);
+    }
+  }
+}
 
-function AutoVeterinary()
-	{
-	while(!Player.Dead() && Orion.Count("bandage")>0)
-		{
-		var friend =Orion.FindFriend('injured', '1');
-		if (Orion.GetDistance(friend)<2)
-			{
-				Orion.Say('[band');
-				if (Orion.WaitForTarget(1000))
-					Orion.TargetObject(friend);
-				Orion.Wait(3000);	
-			}
-		}
-	}
+function CastEnemyOfOne() {
+  if (Player.Mana() < 20) return;
+  Orion.RemoveDisplayTimer("testtimer");
+  Orion.Cast("206");
+  Orion.AddDisplayTimer("testtimer", 215000, "RightTop", "Circle|Bar", "EOO");
+}
+
+function AutoVeterinary() {
+  while (!Player.Dead() && Orion.Count("bandage") > 0) {
+    var friend = Orion.FindFriend("injured", "1");
+    if (Orion.GetDistance(friend) < 2) {
+      Orion.Say("[band");
+      if (Orion.WaitForTarget(1000)) Orion.TargetObject(friend);
+      Orion.Wait(3000);
+    }
+  }
+}

@@ -1,15 +1,22 @@
-// Paste your code here :)
-function AllToMount()
-  {
-var list = Orion.FindList('ToMount' , 'backpack', 'item');
-  if (list.length)
-  {
-  for (var i=0;i<list.length;i++)
-  {
- Orion.DragItem(list[i]);
-    Orion.Wait('500');
-  Orion.DropDraggedItem('MountBackpack');
-  Orion.Wait('1000');
-  }
+function AllToMount() {
+  var list = Orion.FindList(
+    "Loot|ignoreLists|IgnoreToMount",
+    "backpack",
+    "item"
+  );
+  if (list.length) {
+    Orion.WarMode(0);
+    var mount = Orion.ObjAtLayer("Mount");
+    if (mount != null) {
+      Orion.UseObject("self");
+      Orion.Wait("700");
+    }
+    for (var i = 0; i < list.length; i++) {
+      Orion.DragItem(list[i]);
+      Orion.Wait("500");
+      Orion.DropDraggedItem("MountBackpack");
+      Orion.Wait("1000");
+    }
+    if (mount != null) Orion.UseObject("Mount");
   }
 }
