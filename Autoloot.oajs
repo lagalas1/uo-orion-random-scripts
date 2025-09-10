@@ -21,7 +21,7 @@ function AutoLoot(bAutoClaim) {
       }
       Orion.Wait(200);
       AutoLootCertain(deadenemies[i].Serial());
-      if ((bAutoClaim = true)) {
+      if (bAutoClaim == true) {
         Claim(deadenemies[i].Serial());
         Orion.Wait(100);
       }
