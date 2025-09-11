@@ -29,6 +29,9 @@ function Claim1() {
 function Claim(DeadObjectSerial) {
   Orion.Print("Говорим claim");
   Orion.Say("[claim");
-  if (Orion.WaitForTarget(2000)) Orion.TargetObject(DeadObjectSerial);
+  if (Orion.WaitForTarget()) {
+    Orion.Wait(50);
+    Orion.TargetObject(DeadObjectSerial);
+  }
   if (Orion.HaveTarget()) Orion.CancelWaitTarget();
 }

@@ -1,0 +1,108 @@
+function SelfMining() {
+  var charxcoord = Player.X();
+  var charycoord = Player.Y();
+  var xcoord = [];
+  var ycoord = [];
+  var maxradius = 20;
+  var nmaxradius = -maxradius;
+  //Orion.Print(charycoord);
+  for (var i = nmaxradius; i <= maxradius; i++) {
+    for (var j = nmaxradius; j <= maxradius; j++) {
+      var toxcoord = charxcoord + i;
+      var toycoord = charycoord + j;
+      if (!Orion.ValidateTargetTile("mine", toxcoord, toycoord)) continue;
+      Orion.Print("Trying to move to X: " + toxcoord + "  Y:" + toycoord);
+      if (Orion.WalkTo(toxcoord, toycoord, 0, 0)) {
+        xcoord.push(Player.X());
+        ycoord.push(Player.Y());
+        mine(Player.X(), Player.Y());
+      }
+    }
+  }
+  while (!Player.Dead()) {
+    for (var i = 0; i < xcoord.length; i++) {
+      Orion.WalkTo(xcoord[i], ycoord[i], 0, 0);
+      Orion.Print("Trying to move to X: " + xcoord[i] + "  Y:" + ycoord[i]);
+      mine(Player.X(), Player.Y());
+    }
+  }
+}
+
+function mine(x, y) {
+  const maxWeight = Player.MaxWeight() / 2;
+  if (Player.Weight() >= maxWeight) {
+    smelt(Player.X(), Player.Y(), Player.Z());
+    AutoSorting(false);
+    Orion.Wait(200);
+  }
+  if (!Orion.FindType("0x0F39", "-1").length > 0) {
+    Orion.Print("нету лопаты");
+    Orion.PauseScript();
+  }
+  Orion.UseType("0x0F39");
+  Orion.WaitJournal(
+    "Where do you wish",
+    Orion.Now(),
+    Orion.Now() + 2000,
+    "me|sys"
+  );
+  Orion.TargetTile("mine", x, y, Player.Z());
+  var result = Orion.WaitJournal(
+    "You put some|You loosen some|There is no metal|Try mining|is too far|no line of| cannot be seen| mine that|You must wait to perfom another action",
+    Orion.Now(),
+    Orion.Now() + 7000,
+    "me|sys"
+  );
+  if (result == null) {
+    mine(x, y);
+    return;
+  }
+  //Orion.Print(result.FindTextID());
+  switch (result.FindTextID()) {
+    case 0:
+      mine(x, y);
+      break;
+    case 2:
+      break;
+    case 8:
+      mine(x, y);
+      break;
+    default:
+      break;
+  }
+}
+function smelt(x, y, z) {
+  var forge = "0x0FB1";
+  var ore = "0x19B9";
+  Orion.Print("[i] Smelting");
+  var forgeSerial = Orion.FindType(forge, -1, "ground", "", 20);
+  if (forgeSerial) {
+    var forge = Orion.FindObject(forgeSerial);
+    if (forge) {
+      if (Orion.WalkTo(forge.X(), forge.Y(), forge.Z(), 1)) {
+        var ores = Orion.FindType(ore, -1, "backpack");
+        if (ores && ores.length > 0) {
+          ores.forEach(function (items) {
+            Orion.UseType(ore);
+            Orion.WaitJournal(
+              "Select the forge",
+              Orion.Now(),
+              Orion.Now() + 1000,
+              "me|sys"
+            );
+            Orion.TargetObject(forgeSerial);
+            Orion.WaitJournal(
+              "You burn away|You smelt",
+              Orion.Now(),
+              Orion.Now() + 1000,
+              "me|sys"
+            );
+            Orion.Wait(500);
+          });
+          //Back to spot
+          Orion.WalkTo(x, y, z, 0);
+        }
+      }
+    }
+  }
+}

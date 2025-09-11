@@ -126,7 +126,7 @@ var config = {
     "0x3407|0x3F31|0x393D|0x3B92|0x3CD4|0x3F30|0x195C|0x3737|0x1CED", //что нужно сохранять - убрать из списка
 };
 
-function AutoSorting() {
+function AutoSorting(bSortToolHouse) {
   //основная функция автосортинга
   Orion.Print("0x0013", "⇒ СТАРТ СОРТИРОВКИ");
   PackTo(
@@ -154,12 +154,13 @@ function AutoSorting() {
     config["GemPouchGump"],
     config["GemPouchAddButton"]
   ); //добавление вещей в Gem Pouch
-  PackTo(
-    config["TollsLoot"],
-    config["TollsHouseID"],
-    config["TollsHouseGump"],
-    config["TollsHouseAddButton"]
-  ); //добавление вещей в Tolls House
+  if (bSortToolHouse == null || bSortToolHouse == true)
+    PackTo(
+      config["TollsLoot"],
+      config["TollsHouseID"],
+      config["TollsHouseGump"],
+      config["TollsHouseAddButton"]
+    ); //добавление вещей в Tolls House
   //	LootToPet(config['Pet']); //сброс золота в лошадь
   //	TrashToTrashA(config['TokensBag']); //сброс хлама 1
   //	TrashToTrashB(config['TokensBag']); //сброс хлама 2
