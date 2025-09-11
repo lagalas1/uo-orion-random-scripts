@@ -33,7 +33,7 @@ function mine(x, y) {
   if (Player.Weight() >= maxWeight) {
     smelt(Player.X(), Player.Y(), Player.Z());
     AutoSorting(false);
-    Orion.Wait(200);
+    Orion.Wait(300);
   }
   if (!Orion.FindType("0x0F39", "-1").length > 0) {
     Orion.Print("нету лопаты");
@@ -57,20 +57,12 @@ function mine(x, y) {
     mine(x, y);
     return;
   }
-  //Orion.Print(result.FindTextID());
-  switch (result.FindTextID()) {
-    case 0:
-      mine(x, y);
-      break;
-    case 2:
-      break;
-    case 8:
-      mine(x, y);
-      break;
-    default:
-      break;
+  if (result.FindTextID() == 0 || result.FindTextID() == 8) {
+    mine(x, y);
+    return;
   }
 }
+
 function smelt(x, y, z) {
   var forge = "0x0FB1";
   var ore = "0x19B9";
