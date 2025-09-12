@@ -48,7 +48,7 @@ function mine(x, y) {
   );
   Orion.TargetTile("mine", x, y, Player.Z());
   var result = Orion.WaitJournal(
-    "You put some|You loosen some|There is no metal|Try mining|is too far|no line of| cannot be seen| mine that|You must wait to perfom another action",
+    "You put some|You loosen some|There is no metal|Try mining|is too far|no line of| cannot be seen| mine that|You must wait to perform another action",
     Orion.Now(),
     Orion.Now() + 7000,
     "me|sys"
@@ -64,10 +64,10 @@ function mine(x, y) {
 }
 
 function smelt(x, y, z) {
-  var forge = "0x0FB1";
+  var forge = "0x0FB1|0x1996|0x19A2";
   var ore = "0x19B9";
   Orion.Print("[i] Smelting");
-  var forgeSerial = Orion.FindType(forge, -1, "ground", "", 20);
+  var forgeSerial = Orion.FindType(forge, -1, "ground", "near", 30);
   if (forgeSerial) {
     var forge = Orion.FindObject(forgeSerial);
     if (forge) {
